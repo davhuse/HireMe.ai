@@ -51,6 +51,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Outfit', sans-se
 
 /* MAIN */
 .main-content { flex: 1; height: 100vh; overflow-y: auto; padding: 2rem; display: flex; flex-direction: column; gap: 1.5rem; }
+.mobile-tool-switch { display: none; }
 .tool-header h1 { font-size: 1.8rem; font-weight: 800; }
 .tool-header p { color: var(--text-subtle); margin-top: 0.3rem; }
 
@@ -108,49 +109,24 @@ textarea:focus, .custom-input:focus, .custom-select:focus { outline: none; borde
 @media (max-width: 768px) {
     html, body { height: auto; overflow: auto; }
     body { display: block; }
-    .sidebar {
-        width: 100%;
-        height: auto;
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        padding: 0.8rem 0.7rem;
-        border-right: none;
-        border-bottom: 1px solid var(--border);
-        background: rgba(10,10,20,0.97);
-    }
-    .sidebar-logo { margin-bottom: 0.6rem; }
-    .sidebar-nav {
-        flex-direction: row;
-        overflow-x: auto;
-        overflow-y: hidden;
-        gap: 0.45rem;
-        padding-bottom: 0.2rem;
-    }
-    .nav-section-label, .nav-divider, .sidebar-footer { display: none; }
-    .nav-item, .nav-item-link {
-        white-space: nowrap;
-        width: auto;
-        flex-shrink: 0;
-        padding: 0.55rem 0.75rem;
-        font-size: 0.82rem;
-        border: 1px solid var(--border);
-        border-radius: 999px;
-    }
+    .sidebar { display: none; }
+    .mobile-tool-switch { display: block; background: rgba(12,12,24,0.9); border: 1px solid var(--border); border-radius: 12px; padding: 0.7rem; }
+    .mobile-tool-switch label { display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.35rem; font-weight: 600; }
     .main-content {
         height: auto;
-        min-height: calc(100dvh - 120px);
+        min-height: 100dvh;
         overflow: visible;
-        padding: 1rem;
+        padding: 0.8rem;
         gap: 1rem;
     }
-    .tool-topbar { flex-direction: column; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.8rem; }
+    .tool-topbar { flex-direction: column; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.3rem; }
     .tool-topbar-right { width: 100%; overflow-x: auto; padding-bottom: 0.2rem; }
     .glass-card { padding: 1rem; border-radius: 14px; }
     .output-header { gap: 0.5rem; flex-wrap: wrap; }
     .output-body { max-height: none; min-height: 170px; }
     .form-row { flex-direction: column; gap: 0.6rem; }
     .modal-content { margin: 1rem; padding: 1.2rem; max-width: none; width: calc(100% - 2rem); }
+    .support-layout { grid-template-columns: 1fr; }
 }
 
 /* �� NAV DIVIDER �� */

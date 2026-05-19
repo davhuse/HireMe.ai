@@ -129,14 +129,112 @@ document.querySelectorAll('.tool-card, .step-card, .testi-card, .pricing-card').
 document.querySelectorAll('.stat-num[data-target]').forEach(el => revealObs.observe(el));
 
 /* ─────────────────────────────
-   Auth-aware navbar button
+   Theme + Language + Auth-aware navbar
 ───────────────────────────── */
-if (localStorage.getItem('hm_token')) {
-    const btn = document.querySelector('.btn-nav-primary');
-    if (btn) { btn.href = 'dashboard.html'; btn.innerHTML = 'Dashboard <i class="ri-dashboard-line"></i>'; }
-    const heroBtn = document.querySelector('.btn-hero-primary');
-    if (heroBtn) { heroBtn.href = 'dashboard.html'; heroBtn.innerHTML = '<i class="ri-dashboard-line"></i> Go to Dashboard'; }
+const I18N = {
+    en: {
+        signIn: 'Sign In',
+        startFree: 'Start Free',
+        dashboard: 'Dashboard',
+        logout: 'Logout',
+        browseTools: 'Browse Tools',
+        heroDashboard: 'Go to Dashboard'
+    },
+    tr: {
+        signIn: 'Giris Yap',
+        startFree: 'Ucretsiz Basla',
+        dashboard: 'Panel',
+        logout: 'Cikis Yap',
+        browseTools: 'Araclari Incele',
+        heroDashboard: 'Panele Git'
+    }
+};
+
+function getCurrentLang() {
+    return localStorage.getItem('hm_lang') || 'en';
 }
+
+function applyLanguage() {
+    const lang = getCurrentLang();
+    const t = I18N[lang] || I18N.en;
+    const signIn = document.getElementById('navSignIn');
+    const primary = document.getElementById('navPrimaryCta');
+    const logoutBtn = document.getElementById('navLogout');
+    const heroGhost = document.querySelector('.btn-hero-ghost');
+    const heroPrimary = document.querySelector('.btn-hero-primary');
+    if (signIn) signIn.textContent = t.signIn;
+    if (primary && !localStorage.getItem('hm_token')) {
+        primary.innerHTML = `${t.startFree} <i class="ri-arrow-right-line"></i>`;
+    }
+    if (logoutBtn) logoutBtn.textContent = t.logout;
+    if (heroGhost) heroGhost.innerHTML = `<i class="ri-apps-2-line"></i> ${t.browseTools}`;
+    if (heroPrimary && localStorage.getItem('hm_token')) {
+        heroPrimary.innerHTML = `<i class="ri-dashboard-line"></i> ${t.heroDashboard}`;
+    }
+    const langSelect = document.getElementById('langSelect');
+    if (langSelect) langSelect.value = lang;
+}
+
+function applyTheme() {
+    const theme = localStorage.getItem('hm_theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', theme);
+    const themeBtn = document.getElementById('themeBtn');
+    if (themeBtn) {
+        themeBtn.innerHTML = theme === 'light' ? '<i class="ri-moon-line"></i>' : '<i class="ri-sun-line"></i>';
+    }
+}
+
+function applyAuthState() {
+    const token = localStorage.getItem('hm_token');
+    const t = I18N[getCurrentLang()] || I18N.en;
+    const signIn = document.getElementById('navSignIn');
+    const primary = document.getElementById('navPrimaryCta');
+    const logoutBtn = document.getElementById('navLogout');
+    const user = JSON.parse(localStorage.getItem('hm_user') || '{}');
+    const heroBtn = document.querySelector('.btn-hero-primary');
+
+    if (token) {
+        if (signIn) signIn.classList.add('hidden');
+        if (logoutBtn) logoutBtn.classList.remove('hidden');
+        if (primary) {
+            primary.href = 'dashboard.html';
+            primary.innerHTML = `${user.name ? user.name.split(' ')[0] : t.dashboard} <i class="ri-dashboard-line"></i>`;
+        }
+        if (heroBtn) {
+            heroBtn.href = 'dashboard.html';
+            heroBtn.innerHTML = `<i class="ri-dashboard-line"></i> ${t.heroDashboard}`;
+        }
+    } else {
+        if (signIn) signIn.classList.remove('hidden');
+        if (logoutBtn) logoutBtn.classList.add('hidden');
+        if (primary) {
+            primary.href = 'register.html';
+            primary.innerHTML = `${t.startFree} <i class="ri-arrow-right-line"></i>`;
+        }
+    }
+}
+
+document.getElementById('themeBtn')?.addEventListener('click', () => {
+    const next = (localStorage.getItem('hm_theme') || 'dark') === 'dark' ? 'light' : 'dark';
+    localStorage.setItem('hm_theme', next);
+    applyTheme();
+});
+
+document.getElementById('langSelect')?.addEventListener('change', (e) => {
+    localStorage.setItem('hm_lang', e.target.value);
+    applyLanguage();
+    applyAuthState();
+});
+
+document.getElementById('navLogout')?.addEventListener('click', () => {
+    localStorage.removeItem('hm_token');
+    localStorage.removeItem('hm_user');
+    applyAuthState();
+});
+
+applyTheme();
+applyLanguage();
+applyAuthState();
 
 /* ─────────────────────────────
    20-Person Testimonials Slider

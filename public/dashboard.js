@@ -39,6 +39,10 @@ function initUI() {
             document.getElementById('userName').textContent = u.name;
             document.getElementById('userEmail').textContent = u.email;
             document.getElementById('userAvatar').textContent = u.name.charAt(0).toUpperCase();
+            const topbarAvatar = document.getElementById('topbarAvatar');
+            const topbarName = document.getElementById('topbarName');
+            if (topbarAvatar) topbarAvatar.textContent = u.name.charAt(0).toUpperCase();
+            if (topbarName) topbarName.textContent = u.name;
             updateCredits(u.credits);
         })
         .catch(() => { localStorage.clear(); window.location.href = 'login.html'; });
@@ -46,23 +50,40 @@ function initUI() {
 
 function updateCredits(credits) {
     document.getElementById('creditCount').textContent = credits;
+    const topbarCreditNum = document.getElementById('topbarCreditNum');
+    if (topbarCreditNum) topbarCreditNum.textContent = credits;
     const pct = Math.min((credits / 10) * 100, 100);
     document.getElementById('creditFill').style.width = pct + '%';
 }
 
+function selectTool(tool) {
+    const meta = TOOLS[tool];
+    if (!meta) return;
+    document.querySelectorAll('.nav-item[data-tool]').forEach((b) => {
+        b.classList.toggle('active', b.dataset.tool === tool);
+    });
+    document.querySelectorAll('.tool-panel').forEach((p) => p.classList.remove('active'));
+    const panel = document.getElementById(`panel-${tool}`);
+    if (panel) panel.classList.add('active');
+    document.getElementById('toolTitle').textContent = meta.title;
+    document.getElementById('toolDesc').textContent = meta.desc;
+    currentTool = tool;
+    const mobileToolSelect = document.getElementById('mobileToolSelect');
+    if (mobileToolSelect) mobileToolSelect.value = tool;
+    if (tool === 'settings') initSettings();
+}
+
 // ── Navigation ──
-document.querySelectorAll('.nav-item').forEach(btn => {
+document.querySelectorAll('.nav-item[data-tool]').forEach(btn => {
     btn.addEventListener('click', () => {
-        const tool = btn.dataset.tool;
-        document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        document.querySelectorAll('.tool-panel').forEach(p => p.classList.remove('active'));
-        document.getElementById(`panel-${tool}`).classList.add('active');
-        document.getElementById('toolTitle').textContent = TOOLS[tool].title;
-        document.getElementById('toolDesc').textContent = TOOLS[tool].desc;
-        currentTool = tool;
+        selectTool(btn.dataset.tool);
     });
 });
+
+const mobileToolSelect = document.getElementById('mobileToolSelect');
+if (mobileToolSelect) {
+    mobileToolSelect.addEventListener('change', (e) => selectTool(e.target.value));
+}
 
 // ── Logout ──
 document.getElementById('logoutBtn').addEventListener('click', () => {

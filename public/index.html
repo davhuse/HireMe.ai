@@ -27,8 +27,14 @@
         <a href="#pricing">Pricing</a>
     </div>
     <div class="nav-actions">
-        <a href="login.html" class="btn-nav-ghost">Sign In</a>
-        <a href="register.html" class="btn-nav-primary">Start Free <i class="ri-arrow-right-line"></i></a>
+        <select id="langSelect" class="nav-select" aria-label="Language">
+            <option value="en">EN</option>
+            <option value="tr">TR</option>
+        </select>
+        <button id="themeBtn" class="btn-nav-ghost" type="button"><i class="ri-sun-line"></i></button>
+        <a href="login.html" class="btn-nav-ghost" id="navSignIn">Sign In</a>
+        <a href="register.html" class="btn-nav-primary" id="navPrimaryCta">Start Free <i class="ri-arrow-right-line"></i></a>
+        <button id="navLogout" class="btn-nav-ghost hidden" type="button">Logout</button>
     </div>
 </nav>
 
@@ -60,6 +66,13 @@
         </div>
     </div>
     <div class="hero-visual">
+        <div class="hero-3d">
+            <div class="orb3d orb3d-a"></div>
+            <div class="orb3d orb3d-b"></div>
+            <div class="orb3d orb3d-c"></div>
+            <div class="ring3d ring3d-a"></div>
+            <div class="ring3d ring3d-b"></div>
+        </div>
         <div class="floating-card card-1 glass-card-float">
             <div class="fc-icon" style="color:#6366f1;"><i class="ri-file-text-line"></i></div>
             <div><div class="fc-title">Cover Letter</div><div class="fc-sub">Generated in 8s</div></div>
