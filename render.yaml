@@ -1,0 +1,14 @@
+﻿services:
+  - type: web
+    name: hireme-ai
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: MONGODB_URI
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: JWT_SECRET
+        value: super_secret_hireme_key_2026
