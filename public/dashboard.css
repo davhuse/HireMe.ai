@@ -120,9 +120,28 @@ textarea:focus, .custom-input:focus, .custom-select:focus { outline: none; borde
         gap: 1rem;
     }
     .tool-topbar { flex-direction: column; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.3rem; }
-    .tool-topbar-right { width: 100%; overflow-x: auto; padding-bottom: 0.2rem; }
+    .tool-topbar-left h1 { font-size: 1.15rem; }
+    .tool-topbar-left p { font-size: 0.82rem; line-height: 1.5; }
+    .tool-topbar-right {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 44px 1fr 1fr;
+        gap: 0.6rem;
+        overflow: visible;
+        padding-bottom: 0;
+    }
+    .tool-topbar-right > * { min-width: 0; }
+    .credit-badge, .user-badge {
+        min-height: 44px;
+        border-radius: 14px;
+        justify-content: center;
+        padding: 0.6rem 0.8rem;
+        font-size: 0.8rem;
+    }
+    #themeToggle { width: 44px !important; height: 44px !important; padding: 0 !important; }
     .glass-card { padding: 1rem; border-radius: 14px; }
     .output-header { gap: 0.5rem; flex-wrap: wrap; }
+    .copy-btn { flex: 1 1 auto; justify-content: center; }
     .output-body { max-height: none; min-height: 170px; }
     .form-row { flex-direction: column; gap: 0.6rem; }
     .modal-content { margin: 1rem; padding: 1.2rem; max-width: none; width: calc(100% - 2rem); }

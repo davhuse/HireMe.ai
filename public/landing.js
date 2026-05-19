@@ -70,11 +70,15 @@ window.addEventListener('scroll', () => {
 /* ─────────────────────────────
    Typewriter cycling hero text
 ───────────────────────────── */
-const phrases = ['getting hired.', 'landing interviews.', 'writing cover letters.', 'acing interviews.', 'negotiating salary.'];
+const HERO_TYPED = {
+    en: ['getting hired.', 'landing interviews.', 'writing cover letters.', 'acing interviews.', 'negotiating salary.'],
+    tr: ['ise girmeye.', 'mulakat kazanmaya.', 'on yazi yazmaya.', 'mulakati gecmeye.', 'maas pazarligina.']
+};
 let pi = 0, ci = 0, deleting = false;
 const typedEl = document.getElementById('typed');
 
 function typeLoop() {
+    const phrases = HERO_TYPED[getCurrentLang()] || HERO_TYPED.en;
     const phrase = phrases[pi];
     if (!deleting) {
         typedEl.textContent = phrase.substring(0, ci + 1);
@@ -137,16 +141,58 @@ const I18N = {
         startFree: 'Start Free',
         dashboard: 'Dashboard',
         logout: 'Logout',
+        navTools: 'Tools',
+        navHow: 'How It Works',
+        navPricing: 'Pricing',
+        heroChip: 'Powered by GPT-4 · Used by 50,000+ job seekers',
+        heroTitleLead: 'Stop writing.',
         browseTools: 'Browse Tools',
-        heroDashboard: 'Go to Dashboard'
+        heroDashboard: 'Go to Dashboard',
+        heroProof: 'people landed jobs this month',
+        proofBarLabel: 'Loved by job seekers at top companies worldwide',
+        toolsLabel: '10 AI TOOLS',
+        toolsTitleLead: 'Everything you need to',
+        toolsTitleAccent: 'get the job',
+        toolsDesc: 'One subscription unlocks all 10 AI-powered career tools. Each designed to save you hours and maximize your chances.',
+        howLabel: 'HOW IT WORKS',
+        howTitleLead: 'Three steps to',
+        howTitleAccent: 'your offer',
+        pricingLabel: 'PRICING',
+        pricingTitleLead: 'Start free, scale',
+        pricingTitleAccent: "when you're ready",
+        pricingDesc: 'No hidden fees. Cancel anytime. Every plan includes all 10 AI tools.',
+        ctaLabel: 'GET STARTED TODAY',
+        ctaTitle: 'Ready to land your dream job?',
+        ctaDesc: 'Join 50,000+ job seekers already using HireMe.ai.<br>10 AI tools. Instant results. No credit card needed.'
     },
     tr: {
         signIn: 'Giris Yap',
-        startFree: 'Ucretsiz Basla',
+        startFree: 'Ucretsiz Dene',
         dashboard: 'Panel',
         logout: 'Cikis Yap',
+        navTools: 'Araclar',
+        navHow: 'Nasil Calisir',
+        navPricing: 'Fiyatlandirma',
+        heroChip: 'GPT-4 destekli · 50.000+ is arayan kullaniyor',
+        heroTitleLead: 'Yazmayi birak.',
         browseTools: 'Araclari Incele',
-        heroDashboard: 'Panele Git'
+        heroDashboard: 'Panele Git',
+        heroProof: 'kisi bu ay ise yerlesti',
+        proofBarLabel: 'Dunya capinda ust duzey sirketleri hedefleyen adaylarin tercihi',
+        toolsLabel: '10 YAPAY ZEKA ARACI',
+        toolsTitleLead: 'Ise girmek icin ihtiyacin olan',
+        toolsTitleAccent: 'her sey',
+        toolsDesc: 'Tek abonelikle 10 AI kariyer aracinin tamami acilir. Saatlerini geri kazandirir ve sansini guclendirir.',
+        howLabel: 'NASIL CALISIR',
+        howTitleLead: 'Teklife giden',
+        howTitleAccent: 'uc adim',
+        pricingLabel: 'FIYATLANDIRMA',
+        pricingTitleLead: 'Ucretsiz basla,',
+        pricingTitleAccent: 'hazir oldugunda buyut',
+        pricingDesc: 'Gizli ucret yok. Istedigin zaman iptal et. Her planda tum 10 AI araci var.',
+        ctaLabel: 'BUGUN BASLA',
+        ctaTitle: 'Hayalindeki ise hazir misin?',
+        ctaDesc: 'HireMe.ai kullanan 50.000+ is arayana katil.<br>10 AI araci. Aninda sonuc. Kredi karti gerekmez.'
     }
 };
 
@@ -171,8 +217,16 @@ function applyLanguage() {
     if (heroPrimary && localStorage.getItem('hm_token')) {
         heroPrimary.innerHTML = `<i class="ri-dashboard-line"></i> ${t.heroDashboard}`;
     }
+    document.querySelectorAll('[data-i18n]').forEach((el) => {
+        const key = el.dataset.i18n;
+        if (t[key]) el.innerHTML = t[key];
+    });
     const langSelect = document.getElementById('langSelect');
     if (langSelect) langSelect.value = lang;
+    pi = 0;
+    ci = 0;
+    deleting = false;
+    if (typedEl) typedEl.textContent = '';
 }
 
 function applyTheme() {

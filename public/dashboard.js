@@ -26,6 +26,14 @@ const TOOLS = {
     'interview-prep':  { title: 'Interview Prep',           desc: 'Generate tailored interview questions and ideal answers based on the job.' },
     'linkedin-summary':{ title: 'LinkedIn Summary Writer',  desc: 'Write a compelling LinkedIn "About" section that attracts recruiters.' },
     'cold-email':      { title: 'Cold Email Generator',     desc: 'Craft a personalized cold email to recruiters that gets responses.' },
+    'thank-you-email': { title: 'Thank You Email',          desc: 'Send a polished follow-up note after interviews and networking chats.' },
+    'salary-negotiation': { title: 'Salary Negotiation',    desc: 'Write a confident salary counter-offer without sounding aggressive.' },
+    'rejection-response': { title: 'Rejection Response',    desc: 'Respond professionally to a rejection while keeping the door open.' },
+    'professional-bio': { title: 'Professional Bio',        desc: 'Create a sharp short bio for your site, portfolio, or speaker profile.' },
+    'skills-gap':      { title: 'Skills Gap Analyzer',      desc: 'Compare your resume to a role and see what to improve next.' },
+    'history':         { title: 'Document History',         desc: 'Review, copy, and reuse your previous AI-generated documents.' },
+    'settings':        { title: 'Settings & Billing',       desc: 'Manage your profile, credits, theme, and current plan.' },
+    'support':         { title: 'Support Center',           desc: 'Submit tickets, check FAQs, and track replies from support.' }
 };
 
 // ── Init UI ──

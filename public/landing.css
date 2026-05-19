@@ -46,11 +46,11 @@ body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;over
 .nav-links a::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:1px;background:var(--primary);transform:scaleX(0);transition:transform 0.3s}
 .nav-links a:hover{color:var(--text)}
 .nav-links a:hover::after{transform:scaleX(1)}
-.nav-actions{display:flex;align-items:center;gap:0.8rem}
-.nav-select{background:rgba(255,255,255,0.06);border:1px solid var(--border-h);color:var(--text);padding:0.45rem 0.65rem;border-radius:10px;font-weight:600}
-.btn-nav-ghost{text-decoration:none;color:var(--text-sub);font-weight:600;font-size:0.9rem;padding:0.6rem 1.2rem;border-radius:10px;border:1px solid var(--border-h);transition:all 0.25s}
+.nav-actions{display:flex;align-items:center;gap:0.75rem}
+.nav-select{min-height:44px;background:rgba(255,255,255,0.06);border:1px solid var(--border-h);color:var(--text);padding:0.45rem 0.9rem;border-radius:14px;font-weight:700}
+.btn-nav-ghost{text-decoration:none;color:var(--text-sub);font-weight:700;font-size:0.9rem;padding:0.72rem 1.1rem;border-radius:14px;border:1px solid var(--border-h);transition:all 0.25s}
 .btn-nav-ghost:hover{background:rgba(255,255,255,0.06);color:var(--text);border-color:rgba(99,102,241,0.4)}
-.btn-nav-primary{display:inline-flex;align-items:center;gap:0.4rem;text-decoration:none;background:linear-gradient(135deg,var(--primary),var(--secondary));color:white;padding:0.6rem 1.3rem;border-radius:10px;font-weight:700;font-size:0.9rem;transition:all 0.3s;border:none}
+.btn-nav-primary{display:inline-flex;align-items:center;gap:0.4rem;text-decoration:none;background:linear-gradient(135deg,var(--primary),var(--secondary));color:white;padding:0.72rem 1.15rem;border-radius:14px;font-weight:800;font-size:0.9rem;transition:all 0.3s;border:none;min-height:44px}
 .btn-nav-primary:hover{box-shadow:0 0 20px var(--glow-p);transform:translateY(-1px)}
 
 /* ── HERO ── */
@@ -75,16 +75,23 @@ body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;over
 
 /* Hero Visual */
 .hero-visual{position:relative;height:520px}
-.hero-3d{position:absolute;inset:0;perspective:1000px;pointer-events:none}
-.orb3d{position:absolute;border-radius:50%;filter:blur(1px);opacity:.8;transform-style:preserve-3d;animation:orbSpin 14s linear infinite}
-.orb3d-a{width:120px;height:120px;background:radial-gradient(circle at 30% 30%,#67e8f9,#1d4ed8);top:20%;left:18%;box-shadow:0 20px 40px rgba(6,182,212,.25)}
-.orb3d-b{width:90px;height:90px;background:radial-gradient(circle at 30% 30%,#c084fc,#6d28d9);bottom:18%;left:40%;animation-duration:18s}
-.orb3d-c{width:70px;height:70px;background:radial-gradient(circle at 30% 30%,#a7f3d0,#0f766e);top:38%;right:16%;animation-duration:12s}
-.ring3d{position:absolute;border:2px solid rgba(99,102,241,.35);border-radius:999px;transform-style:preserve-3d;animation:ringTilt 10s ease-in-out infinite}
-.ring3d-a{width:240px;height:90px;top:56%;left:12%}
-.ring3d-b{width:180px;height:70px;top:18%;right:10%;animation-delay:-5s}
-@keyframes orbSpin{0%{transform:translateZ(0) rotateY(0deg)}50%{transform:translateZ(50px) rotateY(180deg)}100%{transform:translateZ(0) rotateY(360deg)}}
-@keyframes ringTilt{0%,100%{transform:rotateX(65deg) rotateZ(0deg)}50%{transform:rotateX(65deg) rotateZ(18deg)}}
+.hero-3d{position:absolute;inset:0;perspective:1400px;pointer-events:none}
+.mesh-plane{position:absolute;border-radius:28px;border:1px solid rgba(99,102,241,.18);background:
+linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01)),
+linear-gradient(90deg,rgba(99,102,241,.08) 1px,transparent 1px),
+linear-gradient(rgba(99,102,241,.08) 1px,transparent 1px);
+background-size:auto,36px 36px,36px 36px;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 30px 60px rgba(0,0,0,.28)}
+.mesh-plane-back{width:240px;height:180px;top:24%;left:8%;transform:rotateX(66deg) rotateZ(-18deg);opacity:.48}
+.mesh-plane-front{width:300px;height:220px;bottom:12%;left:4%;transform:rotateX(69deg) rotateZ(12deg);opacity:.62}
+.data-stack{position:absolute;width:116px;height:116px;border-radius:24px;background:linear-gradient(160deg,rgba(20,20,44,.92),rgba(8,8,18,.68));border:1px solid rgba(99,102,241,.22);box-shadow:0 22px 50px rgba(0,0,0,.36),0 0 28px rgba(99,102,241,.12);transform-style:preserve-3d}
+.data-stack::before,.data-stack::after{content:'';position:absolute;left:18px;right:18px;border-radius:12px}
+.data-stack::before{top:22px;height:10px;background:linear-gradient(90deg,#5eead4,#22d3ee);box-shadow:0 18px 0 rgba(129,140,248,.9),0 36px 0 rgba(168,85,247,.8)}
+.data-stack::after{bottom:18px;height:18px;background:linear-gradient(135deg,rgba(99,102,241,.26),rgba(168,85,247,.26));border:1px solid rgba(255,255,255,.06)}
+.data-stack-a{top:16%;left:22%;transform:rotateX(72deg) rotateZ(-22deg)}
+.data-stack-b{bottom:14%;right:18%;transform:rotateX(72deg) rotateZ(22deg)}
+.light-beam{position:absolute;width:18px;border-radius:999px;background:linear-gradient(180deg,rgba(103,232,249,.05),rgba(103,232,249,.95),rgba(103,232,249,.08));filter:blur(.2px);box-shadow:0 0 22px rgba(103,232,249,.35)}
+.light-beam-a{height:154px;top:22%;right:20%;transform:rotate(8deg)}
+.light-beam-b{height:108px;bottom:14%;left:36%;background:linear-gradient(180deg,rgba(196,181,253,.04),rgba(168,85,247,.92),rgba(196,181,253,.08))}
 .glass-card-float{background:rgba(15,15,30,0.75);border:1px solid rgba(255,255,255,0.1);backdrop-filter:blur(20px);border-radius:16px;padding:1rem 1.2rem;display:flex;align-items:center;gap:0.8rem;box-shadow:0 20px 60px rgba(0,0,0,0.4)}
 .floating-card{position:absolute;width:240px;animation:float 6s ease-in-out infinite}
 .card-1{top:20px;right:0;animation-delay:0s}
@@ -231,8 +238,13 @@ body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;over
 }
 @media(max-width:768px){
     .nav-links{display:none}
-    .nav-actions{gap:0.45rem}
-    .nav-select{padding:0.4rem 0.5rem;font-size:.8rem}
+    .nav{padding:0.8rem 4%}
+    .nav-actions{gap:0.5rem;flex-wrap:nowrap}
+    .nav-select,.btn-nav-ghost,.btn-nav-primary{min-height:40px;border-radius:12px}
+    .nav-select{padding:0.35rem 0.7rem;font-size:.8rem;min-width:68px}
+    #themeBtn{width:40px;padding:0;display:flex;align-items:center;justify-content:center}
+    #navPrimaryCta{padding:0.35rem 0.95rem;font-size:.84rem;max-width:134px;justify-content:center}
+    #navLogout{padding:0.35rem 0.8rem;font-size:.82rem;background:rgba(255,255,255,.04)}
     #navSignIn{display:none}
     .tools-grid,.testi-grid,.pricing-grid,.stats-grid{grid-template-columns:1fr}
     .hero{padding:6rem 5% 3rem}.hero-cta{flex-direction:column}
