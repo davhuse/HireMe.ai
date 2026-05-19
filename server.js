@@ -224,8 +224,8 @@ app.get('/api/auth/google/callback', async (req, res) => {
         const token = jwt.sign({ id: user._id, email: user.email, name: user.name }, JWT_SECRET, { expiresIn: '7d' });
         res.redirect(`/dashboard.html?token=${token}&user=${encodeURIComponent(JSON.stringify({name: user.name, email: user.email, credits: user.credits, plan: user.plan, hasCompletedOnboarding: user.hasCompletedOnboarding}))}`);
     } catch (err) {
-        console.error(err);
-        res.redirect('/login.html?error=google_auth_failed');
+        console.error('Google OAuth Error:', err.message, err.stack);
+        res.redirect(`/login.html?error=${encodeURIComponent(err.message)}`);
     }
 });
 
@@ -294,8 +294,8 @@ app.get('/api/auth/github/callback', async (req, res) => {
         const token = jwt.sign({ id: user._id, email: user.email, name: user.name }, JWT_SECRET, { expiresIn: '7d' });
         res.redirect(`/dashboard.html?token=${token}&user=${encodeURIComponent(JSON.stringify({name: user.name, email: user.email, credits: user.credits, plan: user.plan, hasCompletedOnboarding: user.hasCompletedOnboarding}))}`);
     } catch (err) {
-        console.error(err);
-        res.redirect('/login.html?error=github_auth_failed');
+        console.error('GitHub OAuth Error:', err.message, err.stack);
+        res.redirect(`/login.html?error=${encodeURIComponent(err.message)}`);
     }
 });
 
