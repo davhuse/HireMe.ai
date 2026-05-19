@@ -13,12 +13,12 @@ services:
       - key: JWT_SECRET
         value: super_secret_hireme_key_2026
       - key: OAUTH_BASE_URL
-        value: https://hireme-ai-e0a5.onrender.com
+        sync: false
       - key: GITHUB_CLIENT_ID
-        value: Ov23lisPmyiSO7ssd2va
+        sync: false
       - key: GITHUB_CLIENT_SECRET
-        value: 4e45ada4741bc2be5fbe7eda3e5d9088de83eb32
+        sync: false
       - key: GOOGLE_CLIENT_ID
-        value: 580593981475-0vg5vf3d6kskj2489hvndegmhakbf29q.apps.googleusercontent.com
+        sync: false
       - key: GOOGLE_CLIENT_SECRET
-        value: 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
+        sync: false

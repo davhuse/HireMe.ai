@@ -28,15 +28,15 @@ const PORT  = process.env.PORT || 4000;
 const API_KEY  = process.env.OPENAI_API_KEY;
 const BASE_URL = process.env.OPENAI_BASE_URL || 'https://api.openai.com/v1';
 const MODEL    = process.env.MODEL_NAME || 'gpt-3.5-turbo';
-const JWT_SECRET = process.env.JWT_SECRET || 'hireme_ai_secret_2025';
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://Habil:Habil2121@cluster0.4boh43z.mongodb.net/hireme?retryWrites=true&w=majority';
+const JWT_SECRET = process.env.JWT_SECRET || 'dev_only_change_me';
+const MONGODB_URI = process.env.MONGODB_URI || '';
 const FREE_CREDITS = 10;
 
 // OAuth
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '580593981475-0vg5vf3d6kskj2489hvndegmhakbf29q.apps.googleusercontent.com';
-const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || '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';
-const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID || 'Ov23lisPmyiSO7ssd2va';
-const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET || '4e45ada4741bc2be5fbe7eda3e5d9088de83eb32';
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || '';
+const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID || '';
+const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET || '';
 const OAUTH_BASE_URL = process.env.OAUTH_BASE_URL || '';
 
 app.use(cors());
@@ -45,6 +45,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 let dbConnectPromise = null;
 async function ensureDbConnection() {
+    if (!MONGODB_URI) throw new Error('MONGODB_URI is missing');
     if (mongoose.connection.readyState === 1) return;
     if (!dbConnectPromise) {
         dbConnectPromise = mongoose.connect(MONGODB_URI, {
@@ -71,11 +72,15 @@ mongoose.connection.on('connected', () => console.log('✅ MongoDB Connected suc
 mongoose.connection.on('error', (err) => console.error('❌ MongoDB Connection Error:', err));
 mongoose.connection.on('disconnected', () => console.log('🔌 MongoDB Disconnected!'));
 
-mongoose.connect(MONGODB_URI, {
-    serverSelectionTimeoutMS: 5000 // Timeout after 5s instead of 10s to fail faster
-})
-.then(() => console.log('✅ Mongoose connection initialized'))
-.catch(err => console.error('❌ Mongoose initial connection error:', err));
+if (MONGODB_URI) {
+    mongoose.connect(MONGODB_URI, {
+        serverSelectionTimeoutMS: 5000 // Timeout after 5s instead of 10s to fail faster
+    })
+    .then(() => console.log('✅ Mongoose connection initialized'))
+    .catch(err => console.error('❌ Mongoose initial connection error:', err));
+} else {
+    console.error('❌ MONGODB_URI is missing. Set it in environment variables.');
+}
 
 // ── Mongoose Models ──
 const historySchema = new mongoose.Schema({

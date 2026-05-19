@@ -213,6 +213,10 @@ body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;over
     .tools-grid,.testi-grid,.pricing-grid,.stats-grid{grid-template-columns:1fr}
     .hero{padding:6rem 5% 3rem}.hero-cta{flex-direction:column}
     .footer-top{grid-template-columns:1fr}.footer-bottom{flex-direction:column;gap:0.5rem}
+    .cta-banner{padding:2.2rem 1.2rem;border-radius:18px;margin:0 4% 3rem}
+    .cta-features-row{gap:0.8rem;justify-content:flex-start}
+    .proof-bar-inner{gap:0.7rem}
+    .proof-divider{display:none}
 }
 
 /* ── TESTIMONIALS SLIDER ── */

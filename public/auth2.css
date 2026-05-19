@@ -12,7 +12,7 @@ html,body{height:100%;overflow:hidden}
 body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif}
 
 /* LAYOUT */
-.auth-layout{display:grid;grid-template-columns:1fr 1fr;height:100vh}
+.auth-layout{display:grid;grid-template-columns:1fr 1fr;height:100dvh}
 
 /* LEFT */
 .auth-left{position:relative;background:linear-gradient(145deg,#090920,#0f0830,#09091a);overflow:hidden;display:flex;align-items:center;justify-content:center;padding:3rem}
@@ -95,6 +95,6 @@ h1{font-size:1.9rem;font-weight:800;letter-spacing:-0.03em;margin-bottom:0.4rem;
 @media(max-width:768px){
     .auth-layout{grid-template-columns:1fr;height:auto;overflow:auto}
     .auth-left{display:none}
-    .auth-right{min-height:100vh}
+    .auth-right{min-height:100dvh}
     html,body{height:auto;overflow:auto}
 }
