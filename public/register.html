@@ -48,6 +48,19 @@
 
                 <div id="error-box" class="error-box hidden"></div>
 
+                <div class="social-login">
+                    <button type="button" class="btn-social" onclick="window.location.href='/api/auth/google'">
+                        <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google">
+                        Continue with Google
+                    </button>
+                    <button type="button" class="btn-social" onclick="window.location.href='/api/auth/github'">
+                        <img src="https://www.svgrepo.com/show/512317/github-142.svg" alt="GitHub">
+                        Continue with GitHub
+                    </button>
+                </div>
+
+                <div class="auth-divider"><span>or sign up with email</span></div>
+
                 <form id="registerForm">
                     <div class="field-group">
                         <label>Full Name</label>
@@ -75,8 +88,6 @@
                         <i class="ri-arrow-right-line"></i>
                     </button>
                 </form>
-
-                <div class="auth-divider"><span>or</span></div>
 
                 <div class="switch-prompt">
                     Already have an account? <a href="login.html">Sign in →</a>

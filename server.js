@@ -1,4 +1,4 @@
-﻿const express = require('express');
+const express = require('express');
 const cors = require('cors');
 const fetch = require('node-fetch');
 const path = require('path');
@@ -25,8 +25,15 @@ const API_KEY  = process.env.OPENAI_API_KEY;
 const BASE_URL = process.env.OPENAI_BASE_URL || 'https://api.openai.com/v1';
 const MODEL    = process.env.MODEL_NAME || 'gpt-3.5-turbo';
 const JWT_SECRET = process.env.JWT_SECRET || 'hireme_ai_secret_2025';
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/hiremeai';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/hireme';
 const FREE_CREDITS = 10;
+
+// OAuth
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
+const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
+const OAUTH_BASE_URL = process.env.OAUTH_BASE_URL || `http://localhost:${PORT}`;
 
 app.use(cors());
 app.use(express.json());
@@ -49,7 +56,9 @@ const historySchema = new mongoose.Schema({
 const userSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    password: { type: String }, // Optional for OAuth
+    googleId: { type: String, unique: true, sparse: true },
+    githubId: { type: String, unique: true, sparse: true },
     credits: { type: Number, default: FREE_CREDITS },
     plan: { type: String, default: 'starter' },
     hasCompletedOnboarding: { type: Boolean, default: false },
@@ -164,9 +173,130 @@ app.get('/api/auth/me', authMiddleware, async (req, res) => {
     try {
         const user = await User.findOne({ email: req.user.email });
         if (!user) return res.status(404).json({ error: 'User not found' });
-        const { password: _, history, ...safeUser } = user.toObject();
-        res.json(safeUser);
+        res.json({ name: user.name, email: user.email, credits: user.credits, plan: user.plan, hasCompletedOnboarding: user.hasCompletedOnboarding });
     } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ── Google OAuth ──
+app.get('/api/auth/google', (req, res) => {
+    const redirectUri = encodeURIComponent(`${OAUTH_BASE_URL}/api/auth/google/callback`);
+    const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${redirectUri}&response_type=code&scope=profile email`;
+    res.redirect(url);
+});
+
+app.get('/api/auth/google/callback', async (req, res) => {
+    const { code } = req.query;
+    if (!code) return res.redirect('/login.html?error=no_code');
+    
+    try {
+        // Exchange code for token
+        const redirectUri = `${OAUTH_BASE_URL}/api/auth/google/callback`;
+        const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `code=${code}&client_id=${GOOGLE_CLIENT_ID}&client_secret=${GOOGLE_CLIENT_SECRET}&redirect_uri=${redirectUri}&grant_type=authorization_code`
+        });
+        const tokenData = await tokenRes.json();
+        
+        if (!tokenData.access_token) throw new Error('Failed to get access token');
+        
+        // Get user info
+        const userRes = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+            headers: { Authorization: `Bearer ${tokenData.access_token}` }
+        });
+        const userData = await userRes.json();
+        if (!userData.email) throw new Error('No email found from Google');
+        
+        // Find or create user
+        let user = await User.findOne({ $or: [{ googleId: userData.id }, { email: userData.email }] });
+        
+        if (!user) {
+            user = await User.create({
+                name: userData.name || 'Google User',
+                email: userData.email,
+                googleId: userData.id
+            });
+        } else if (!user.googleId) {
+            user.googleId = userData.id;
+            await user.save();
+        }
+        
+        const token = jwt.sign({ id: user._id, email: user.email, name: user.name }, JWT_SECRET, { expiresIn: '7d' });
+        res.redirect(`/dashboard.html?token=${token}&user=${encodeURIComponent(JSON.stringify({name: user.name, email: user.email, credits: user.credits, plan: user.plan, hasCompletedOnboarding: user.hasCompletedOnboarding}))}`);
+    } catch (err) {
+        console.error(err);
+        res.redirect('/login.html?error=google_auth_failed');
+    }
+});
+
+// ── GitHub OAuth ──
+app.get('/api/auth/github', (req, res) => {
+    const redirectUri = encodeURIComponent(`${OAUTH_BASE_URL}/api/auth/github/callback`);
+    const url = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${redirectUri}&scope=user:email`;
+    res.redirect(url);
+});
+
+app.get('/api/auth/github/callback', async (req, res) => {
+    const { code } = req.query;
+    if (!code) return res.redirect('/login.html?error=no_code');
+    
+    try {
+        const tokenRes = await fetch('https://github.com/login/oauth/access_token', {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                client_id: GITHUB_CLIENT_ID,
+                client_secret: GITHUB_CLIENT_SECRET,
+                code: code
+            })
+        });
+        const tokenData = await tokenRes.json();
+        
+        if (!tokenData.access_token) throw new Error('Failed to get access token');
+        
+        // Get user info
+        const userRes = await fetch('https://api.github.com/user', {
+            headers: { 
+                Authorization: `Bearer ${tokenData.access_token}`,
+                Accept: 'application/json'
+            }
+        });
+        const userData = await userRes.json();
+        
+        // Get user email
+        const emailRes = await fetch('https://api.github.com/user/emails', {
+            headers: { 
+                Authorization: `Bearer ${tokenData.access_token}`,
+                Accept: 'application/json'
+            }
+        });
+        const emailData = await emailRes.json();
+        const primaryEmail = emailData.find(e => e.primary)?.email || emailData[0]?.email;
+        
+        if (!primaryEmail) throw new Error('No email found from GitHub');
+        
+        let user = await User.findOne({ $or: [{ githubId: userData.id.toString() }, { email: primaryEmail }] });
+        
+        if (!user) {
+            user = await User.create({
+                name: userData.name || userData.login || 'GitHub User',
+                email: primaryEmail,
+                githubId: userData.id.toString()
+            });
+        } else if (!user.githubId) {
+            user.githubId = userData.id.toString();
+            await user.save();
+        }
+        
+        const token = jwt.sign({ id: user._id, email: user.email, name: user.name }, JWT_SECRET, { expiresIn: '7d' });
+        res.redirect(`/dashboard.html?token=${token}&user=${encodeURIComponent(JSON.stringify({name: user.name, email: user.email, credits: user.credits, plan: user.plan, hasCompletedOnboarding: user.hasCompletedOnboarding}))}`);
+    } catch (err) {
+        console.error(err);
+        res.redirect('/login.html?error=github_auth_failed');
+    }
 });
 
 // ═══════════════════════════════════
