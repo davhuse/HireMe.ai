@@ -1,3 +1,15 @@
+// ── Handle OAuth Redirects ──
+const urlParams = new URLSearchParams(window.location.search);
+const urlToken = urlParams.get('token');
+const urlUser = urlParams.get('user');
+
+if (urlToken && urlUser) {
+    localStorage.setItem('hm_token', urlToken);
+    localStorage.setItem('hm_user', urlUser);
+    // Remove query params from URL without reloading
+    window.history.replaceState({}, document.title, window.location.pathname);
+}
+
 // ── Auth Guard ──
 const token = localStorage.getItem('hm_token');
 if (!token) window.location.href = 'login.html';
