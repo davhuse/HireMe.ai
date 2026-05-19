@@ -22,3 +22,13 @@ services:
         sync: false
       - key: GOOGLE_CLIENT_SECRET
         sync: false
+      - key: LEMON_API_KEY
+        sync: false
+      - key: LEMON_STORE_ID
+        sync: false
+      - key: LEMON_VARIANT_ID
+        sync: false
+      - key: LEMON_WEBHOOK_SECRET
+        sync: false
+      - key: LEMON_TEST_MODE
+        value: "false"

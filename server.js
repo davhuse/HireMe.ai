@@ -6,6 +6,7 @@ const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
+const crypto = require('crypto');
 
 // ── Manual .env reader (bypasses dotenvx global injection) ──
 const envFile = path.join(__dirname, '.env');
@@ -39,7 +40,74 @@ const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID || '';
 const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET || '';
 const OAUTH_BASE_URL = process.env.OAUTH_BASE_URL || '';
 
+// Lemon Squeezy billing
+const LEMON_API_KEY = process.env.LEMON_API_KEY || '';
+const LEMON_STORE_ID = process.env.LEMON_STORE_ID || '';
+const LEMON_VARIANT_ID = process.env.LEMON_VARIANT_ID || '';
+const LEMON_WEBHOOK_SECRET = process.env.LEMON_WEBHOOK_SECRET || '';
+const LEMON_TEST_MODE = String(process.env.LEMON_TEST_MODE || 'false').toLowerCase() === 'true';
+
 app.use(cors());
+
+// Lemon Squeezy needs the exact raw body for HMAC signature verification.
+app.post('/api/billing/lemonsqueezy/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+    try {
+        if (!LEMON_WEBHOOK_SECRET) return res.status(500).json({ error: 'Webhook secret is not configured.' });
+
+        const signature = req.get('X-Signature') || '';
+        const digest = crypto
+            .createHmac('sha256', LEMON_WEBHOOK_SECRET)
+            .update(req.body)
+            .digest('hex');
+
+        const expected = Buffer.from(digest, 'utf8');
+        const received = Buffer.from(signature, 'utf8');
+        if (expected.length !== received.length || !crypto.timingSafeEqual(expected, received)) {
+            return res.status(401).json({ error: 'Invalid signature.' });
+        }
+
+        await ensureDbConnection();
+        const payload = JSON.parse(req.body.toString('utf8'));
+        const eventName = payload?.meta?.event_name;
+        const custom = payload?.meta?.custom_data || {};
+        const attrs = payload?.data?.attributes || {};
+        const userId = custom.user_id;
+        const email = custom.email || attrs.user_email || attrs.customer_email;
+        const query = userId ? { _id: userId } : email ? { email } : null;
+        if (!query) return res.status(200).json({ ok: true, ignored: 'missing user reference' });
+
+        const user = await User.findOne(query);
+        if (!user) return res.status(200).json({ ok: true, ignored: 'user not found' });
+
+        const subscriptionId = payload?.data?.id || attrs.subscription_id || attrs.subscription_id_formatted;
+        const status = attrs.status || attrs.status_formatted || eventName;
+        if (subscriptionId) user.lemonSubscriptionId = String(subscriptionId);
+        if (attrs.customer_id) user.lemonCustomerId = String(attrs.customer_id);
+        if (attrs.variant_id) user.lemonVariantId = String(attrs.variant_id);
+        if (status) user.lemonStatus = String(status);
+
+        const activeStatuses = ['active', 'on_trial'];
+        const activeEvents = ['subscription_created', 'subscription_payment_success', 'subscription_resumed'];
+        const inactiveEvents = ['subscription_expired', 'subscription_payment_refunded', 'order_refunded'];
+
+        if (activeEvents.includes(eventName) || (eventName === 'subscription_updated' && activeStatuses.includes(attrs.status))) {
+            user.plan = 'pro';
+            user.credits = 999999;
+        }
+
+        if (inactiveEvents.includes(eventName)) {
+            user.plan = 'starter';
+            user.credits = Math.min(user.credits || FREE_CREDITS, FREE_CREDITS);
+        }
+
+        await user.save();
+        res.json({ ok: true });
+    } catch (e) {
+        console.error('Lemon webhook error:', e.message, e.stack);
+        res.status(500).json({ error: e.message });
+    }
+});
+
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -99,6 +167,10 @@ const userSchema = new mongoose.Schema({
     githubId: { type: String, unique: true, sparse: true },
     credits: { type: Number, default: FREE_CREDITS },
     plan: { type: String, default: 'starter' },
+    lemonCustomerId: { type: String, default: '' },
+    lemonSubscriptionId: { type: String, default: '' },
+    lemonVariantId: { type: String, default: '' },
+    lemonStatus: { type: String, default: '' },
     hasCompletedOnboarding: { type: Boolean, default: false },
     industry: { type: String, default: '' },
     targetRole: { type: String, default: '' },
@@ -424,8 +496,85 @@ app.post('/api/user/profile', authMiddleware, async (req, res) => {
 // 4. Upgrade Plan
 app.post('/api/user/upgrade', authMiddleware, async (req, res) => {
     res.status(402).json({
-        error: 'Payments are not configured yet. Pro upgrades are temporarily disabled.'
+        error: 'Please use Lemon Squeezy checkout to upgrade.'
     });
+});
+
+app.post('/api/billing/checkout', authMiddleware, async (req, res) => {
+    try {
+        await ensureDbConnection();
+        if (!LEMON_API_KEY || !LEMON_STORE_ID || !LEMON_VARIANT_ID) {
+            return res.status(500).json({ error: 'Lemon Squeezy is not configured yet.' });
+        }
+
+        const user = await User.findOne({ email: req.user.email });
+        if (!user) return res.status(404).json({ error: 'User not found' });
+        if (user.plan === 'pro') return res.json({ alreadyPro: true, url: '/dashboard.html' });
+
+        const baseUrl = getOAuthBaseUrl(req);
+        const payload = {
+            data: {
+                type: 'checkouts',
+                attributes: {
+                    product_options: {
+                        redirect_url: `${baseUrl}/dashboard.html?billing=success`,
+                        receipt_button_text: 'Go to dashboard',
+                        receipt_link_url: `${baseUrl}/dashboard.html?billing=success`,
+                        enabled_variants: [Number(LEMON_VARIANT_ID)]
+                    },
+                    checkout_options: {
+                        embed: false,
+                        media: false,
+                        logo: true,
+                        discount: true
+                    },
+                    checkout_data: {
+                        email: user.email,
+                        name: user.name,
+                        custom: {
+                            user_id: String(user._id),
+                            email: user.email
+                        }
+                    },
+                    test_mode: LEMON_TEST_MODE
+                },
+                relationships: {
+                    store: {
+                        data: {
+                            type: 'stores',
+                            id: String(LEMON_STORE_ID)
+                        }
+                    },
+                    variant: {
+                        data: {
+                            type: 'variants',
+                            id: String(LEMON_VARIANT_ID)
+                        }
+                    }
+                }
+            }
+        };
+
+        const lemonRes = await fetch('https://api.lemonsqueezy.com/v1/checkouts', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/vnd.api+json',
+                'Content-Type': 'application/vnd.api+json',
+                Authorization: `Bearer ${LEMON_API_KEY}`
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await lemonRes.json();
+        if (!lemonRes.ok) {
+            const detail = data?.errors?.[0]?.detail || data?.errors?.[0]?.title || 'Failed to create Lemon checkout.';
+            return res.status(500).json({ error: detail });
+        }
+
+        res.json({ url: data?.data?.attributes?.url });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
 });
 
 // ═══════════════════════════════════

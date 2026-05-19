@@ -347,8 +347,8 @@
                         <div class="billing-plan" id="set-plan">Starter</div>
                         <div class="billing-credit-row"><i class="ri-coin-line"></i> <span id="set-credits">10</span> credits remaining</div>
                         <div class="credit-bar"><div class="credit-fill" id="set-fill" style="width:100%;"></div></div>
-                        <div class="billing-note"><i class="ri-information-line"></i> Online payments are not connected yet, so Pro upgrades are paused for now.</div>
-                        <button class="btn-generate btn-disabled-upgrade" type="button" onclick="openCheckoutModal()"><i class="ri-vip-crown-fill"></i> Pro Coming Soon</button>
+                        <div class="billing-note"><i class="ri-information-line"></i> Secure checkout is handled by Lemon Squeezy. Your account will become Pro after the payment webhook is confirmed.</div>
+                        <button class="btn-generate" type="button" onclick="openCheckoutModal()"><i class="ri-vip-crown-fill"></i> Upgrade with Lemon Squeezy</button>
                     </div>
                 </div>
             </div>
@@ -379,11 +379,11 @@
                         <div class="faq-list">
                             <div class="faq-item">
                                 <div class="faq-q" onclick="toggleFaq(this)"><span>How do credits work?</span><i class="ri-arrow-down-s-line"></i></div>
-                                <div class="faq-a">Each AI generation uses 1 credit. Free accounts start with 10 credits. Pro billing is being prepared.</div>
+                                <div class="faq-a">Each AI generation uses 1 credit. Free accounts start with 10 credits. Pro accounts get unlimited credits.</div>
                             </div>
                             <div class="faq-item">
                                 <div class="faq-q" onclick="toggleFaq(this)"><span>Can I upgrade later?</span><i class="ri-arrow-down-s-line"></i></div>
-                                <div class="faq-a">Yes. Pro and Team upgrades will be available after payment checkout is connected. Your data and history will be preserved.</div>
+                                <div class="faq-a">Yes. You can upgrade through Lemon Squeezy. Your data and history will be preserved.</div>
                             </div>
                             <div class="faq-item">
                                 <div class="faq-q" onclick="toggleFaq(this)"><span>How long does generation take?</span><i class="ri-arrow-down-s-line"></i></div>
@@ -449,19 +449,20 @@
         </div>
     </div>
 
-    <!-- ── STRIPE CHECKOUT MODAL ── -->
+    <!-- ── LEMON SQUEEZY CHECKOUT MODAL ── -->
     <div class="modal-overlay" id="checkoutModal">
         <div class="modal-content" style="max-width:400px; padding:2rem;">
             <div class="modal-header" style="margin-bottom:1.5rem;">
-                <i class="ri-secure-payment-line" style="font-size:2.5rem; color:#fbbf24;"></i>
-                <h2 style="font-size:1.5rem;">Pro is not active yet</h2>
-                <p>Payment checkout is being prepared. Your current plan will stay unchanged.</p>
+                <i class="ri-secure-payment-line" style="font-size:2.5rem; color:#10b981;"></i>
+                <h2 style="font-size:1.5rem;">Upgrade to Pro</h2>
+                <p>You will be redirected to Lemon Squeezy's secure checkout. Pro is activated automatically after payment confirmation.</p>
             </div>
-            <div style="background:rgba(251,191,36,0.1); color:#fbbf24; padding:0.8rem; border-radius:8px; font-size:0.85rem; margin-bottom:1.5rem; text-align:center;">
-                <i class="ri-information-line"></i> The old test upgrade is disabled, so free users cannot become Pro without payment.
+            <div style="background:rgba(16,185,129,0.1); color:#34d399; padding:0.8rem; border-radius:8px; font-size:0.85rem; margin-bottom:1.5rem; text-align:center;">
+                <i class="ri-shield-check-line"></i> Card, tax, invoice, and receipt flow is handled by Lemon Squeezy.
             </div>
             <div class="modal-btns" style="justify-content:flex-end;">
-                <button class="btn-modal-next" onclick="closeCheckout()" id="btn-checkout"><i class="ri-check-line"></i> Okay</button>
+                <button class="btn-modal-back" onclick="closeCheckout()">Cancel</button>
+                <button class="btn-modal-next" onclick="submitCheckout()" id="btn-checkout"><i class="ri-external-link-line"></i> Continue</button>
             </div>
         </div>
     </div>

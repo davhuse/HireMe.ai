@@ -435,7 +435,7 @@ async function saveSettings() {
     }
 }
 
-// ── STRIPE CHECKOUT SIMULATION ──
+// Lemon Squeezy checkout
 function openCheckoutModal() {
     if(currentUser.plan === 'pro') { alert('You are already on the Pro plan!'); return; }
     document.getElementById('checkoutModal').classList.add('active');
@@ -446,7 +446,32 @@ function closeCheckout() {
 }
 
 async function submitCheckout() {
-    closeCheckout();
+    const btn = document.getElementById('btn-checkout');
+    const original = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Opening...';
+    try {
+        const res = await fetch('/api/billing/checkout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('hm_token')}`
+            }
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed to create checkout.');
+        if (data.alreadyPro) {
+            closeCheckout();
+            await refreshUser();
+            return;
+        }
+        if (!data.url) throw new Error('Checkout URL was not returned.');
+        window.location.href = data.url;
+    } catch (e) {
+        alert(e.message);
+        btn.disabled = false;
+        btn.innerHTML = original;
+    }
 }
 
 // Hook settings panel open without relying on a global selectTool function
