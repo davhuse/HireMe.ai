@@ -25,7 +25,7 @@ const API_KEY  = process.env.OPENAI_API_KEY;
 const BASE_URL = process.env.OPENAI_BASE_URL || 'https://api.openai.com/v1';
 const MODEL    = process.env.MODEL_NAME || 'gpt-3.5-turbo';
 const JWT_SECRET = process.env.JWT_SECRET || 'hireme_ai_secret_2025';
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/hireme';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://Habil:Habil2121@cluster0.4boh43z.mongodb.net/hireme?retryWrites=true&w=majority';
 const FREE_CREDITS = 10;
 
 // OAuth
