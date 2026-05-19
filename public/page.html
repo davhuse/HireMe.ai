@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HireMe.ai</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="landing.css">
+    <style>
+        .page-content { max-width: 800px; margin: 120px auto 60px; padding: 2rem; background: rgba(12,12,24,0.8); border: 1px solid var(--border); border-radius: 18px; backdrop-filter: blur(16px); color: var(--text-subtle); line-height: 1.8; }
+        .page-content h1 { color: var(--text); font-size: 2.5rem; margin-bottom: 1rem; }
+        .page-content h2 { color: var(--text); font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1rem; }
+        .page-content p { margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+    <nav class="nav" id="nav">
+        <a href="/" class="nav-brand"><img src="logo.png" alt="HireMe.ai" class="nav-logo-img"><span>HireMe<em>.ai</em></span></a>
+        <div class="nav-actions"><a href="/" class="btn-nav-ghost">Back Home</a></div>
+    </nav>
+
+    <div class="page-content" id="contentArea">
+        <h1>Loading...</h1>
+    </div>
+
+    <script>
+        const pages = {
+            about: { title: "About Us", text: "<p>HireMe.ai was founded with a single mission: to level the playing field for job seekers. Our AI-driven tools help you stand out, bypass ATS filters, and secure interviews faster.</p><h2>Our Vision</h2><p>We believe everyone deserves to put their best foot forward. By combining cutting-edge AI with proven career coaching strategies, we deliver personalized, high-impact applications in seconds.</p>" },
+            blog: { title: "Blog", text: "<p>Welcome to our blog. Here you'll find tips on interviewing, resume writing, and career growth.</p><p><i>Posts coming soon!</i></p>" },
+            contact: { title: "Contact Us", text: "<p>Have a question or need support? We're here to help.</p><p>Email us at: <strong>support@hireme.ai</strong></p><p>We typically respond within 24 hours.</p>" },
+            privacy: { title: "Privacy Policy", text: "<p>We take your privacy seriously. This policy describes how we collect, use, and protect your data.</p><h2>Data Collection</h2><p>We only collect data necessary to provide our service (e.g., your resume, job descriptions). We do not sell your personal data.</p><h2>Security</h2><p>All data is encrypted in transit and at rest. Your resumes are kept confidential.</p>" },
+            terms: { title: "Terms of Service", text: "<p>By using HireMe.ai, you agree to these terms.</p><h2>Usage</h2><p>You may use our platform to generate career documents for your personal job search. Commercial use or reselling of generated content is prohibited without permission.</p>" },
+            cookies: { title: "Cookie Policy", text: "<p>We use cookies to improve your experience on our site.</p><p>Essential cookies are used for authentication (keeping you logged in), while analytics cookies help us understand how people use our tools so we can improve them.</p>" }
+        };
+
+        const params = new URLSearchParams(window.location.search);
+        const p = params.get('p') || 'about';
+        const data = pages[p] || pages.about;
+
+        document.title = data.title + " | HireMe.ai";
+        document.getElementById('contentArea').innerHTML = `<h1>${data.title}</h1>${data.text}`;
+    </script>
+</body>
+</html>

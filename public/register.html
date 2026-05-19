@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account – HireMe.ai</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="auth2.css">
+</head>
+<body>
+    <div class="auth-layout">
+
+        <!-- LEFT PANEL -->
+        <div class="auth-left">
+            <canvas id="authCanvas"></canvas>
+            <div class="auth-left-content">
+                <a href="/" class="auth-logo">
+                    <img src="logo.png" alt="">
+                    <span>HireMe<em>.ai</em></span>
+                </a>
+                <div class="auth-headline">
+                    <h2>Start free.<br>Get hired faster.</h2>
+                    <p>Join 50,000+ job seekers using AI to accelerate their careers.</p>
+                </div>
+                <div class="auth-features">
+                    <div class="af-item"><i class="ri-gift-fill" style="color:#fbbf24;"></i> 10 free credits — no card needed</div>
+                    <div class="af-item"><i class="ri-checkbox-circle-fill"></i> All 10 AI tools unlocked instantly</div>
+                    <div class="af-item"><i class="ri-checkbox-circle-fill"></i> ATS-optimized outputs every time</div>
+                    <div class="af-item"><i class="ri-checkbox-circle-fill"></i> Cancel or upgrade anytime</div>
+                </div>
+                <div class="auth-stats-row">
+                    <div class="as-item"><div class="as-num">50K+</div><div class="as-label">Users</div></div>
+                    <div class="as-divider"></div>
+                    <div class="as-item"><div class="as-num">4.9★</div><div class="as-label">Rating</div></div>
+                    <div class="as-divider"></div>
+                    <div class="as-item"><div class="as-num">10</div><div class="as-label">AI Tools</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT PANEL -->
+        <div class="auth-right">
+            <div class="auth-form-wrap">
+                <a href="/" class="back-link"><i class="ri-arrow-left-line"></i> Back to home</a>
+                <h1>Create free account</h1>
+                <p class="form-sub">Get <strong>10 free credits</strong> instantly — no credit card needed</p>
+
+                <div id="error-box" class="error-box hidden"></div>
+
+                <form id="registerForm">
+                    <div class="field-group">
+                        <label>Full Name</label>
+                        <div class="field-wrap">
+                            <i class="ri-user-line"></i>
+                            <input type="text" id="name" placeholder="Jane Smith" required>
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label>Email address</label>
+                        <div class="field-wrap">
+                            <i class="ri-mail-line"></i>
+                            <input type="email" id="email" placeholder="you@example.com" required>
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label>Password</label>
+                        <div class="field-wrap">
+                            <i class="ri-lock-line"></i>
+                            <input type="password" id="password" placeholder="At least 6 characters" minlength="6" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-submit" id="submitBtn">
+                        <span>Create Account</span>
+                        <i class="ri-arrow-right-line"></i>
+                    </button>
+                </form>
+
+                <div class="auth-divider"><span>or</span></div>
+
+                <div class="switch-prompt">
+                    Already have an account? <a href="login.html">Sign in →</a>
+                </div>
+
+                <p class="terms-note">By signing up, you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (localStorage.getItem('hm_token')) window.location.href = 'dashboard.html';
+
+        const cv = document.getElementById('authCanvas');
+        const ct = cv.getContext('2d');
+        function resizeCv() { cv.width = cv.offsetWidth; cv.height = cv.offsetHeight; }
+        resizeCv();
+        const pts = Array.from({length:50}, () => ({ x:Math.random()*cv.width, y:Math.random()*cv.height, vx:(Math.random()-.5)*.3, vy:(Math.random()-.5)*.3 }));
+        function animCv() {
+            ct.clearRect(0,0,cv.width,cv.height);
+            pts.forEach(p => {
+                p.x+=p.vx; p.y+=p.vy;
+                if(p.x<0||p.x>cv.width) p.vx*=-1;
+                if(p.y<0||p.y>cv.height) p.vy*=-1;
+                ct.beginPath(); ct.arc(p.x,p.y,1.5,0,Math.PI*2);
+                ct.fillStyle='rgba(168,85,247,0.4)'; ct.fill();
+            });
+            pts.forEach((a,i) => pts.slice(i+1).forEach(b => {
+                const d=Math.hypot(a.x-b.x,a.y-b.y);
+                if(d<100){ ct.beginPath(); ct.moveTo(a.x,a.y); ct.lineTo(b.x,b.y);
+                    ct.strokeStyle=`rgba(99,102,241,${0.15*(1-d/100)})`; ct.lineWidth=0.5; ct.stroke(); }
+            }));
+            requestAnimationFrame(animCv);
+        }
+        animCv();
+
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const errBox = document.getElementById('error-box');
+            btn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Creating...';
+            btn.disabled = true;
+            errBox.classList.add('hidden');
+            try {
+                const res = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: document.getElementById('name').value, email: document.getElementById('email').value, password: document.getElementById('password').value })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error);
+                localStorage.setItem('hm_token', data.token);
+                localStorage.setItem('hm_user', JSON.stringify(data.user));
+                window.location.href = 'dashboard.html';
+            } catch (err) {
+                errBox.textContent = err.message;
+                errBox.classList.remove('hidden');
+                btn.innerHTML = '<span>Create Account</span><i class="ri-arrow-right-line"></i>';
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

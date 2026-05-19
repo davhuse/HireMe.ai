@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1779158331185,
+    "name": "Habil Rencber",
+    "email": "habilrencber@gmail.com",
+    "password": "$2b$10$.c.IgP90xXBHoO8YHH76f.DqQoZ42xu/DYFcyphZdnYAin21iIYZO",
+    "credits": 10,
+    "createdAt": "2026-05-19T02:38:51.185Z"
+  },
+  {
+    "id": 1779161551199,
+    "name": "Test",
+    "email": "test1779161551102@example.com",
+    "password": "$2b$10$h.mKquHOSHSO9b3ljaw0pu/INcj7Dh5ypSHDoUulJQFm5AJaptOAS",
+    "credits": 10,
+    "createdAt": "2026-05-19T03:32:31.199Z"
+  },
+  {
+    "id": 1779161643353,
+    "name": "Test",
+    "email": "test1779161643259@example.com",
+    "password": "$2b$10$FiwqRkco276MfAAW7fD2XOYUEXUkDAs7639Bz5oGnhI/JoGjS3uo2",
+    "credits": 10,
+    "createdAt": "2026-05-19T03:34:03.353Z"
+  }
+]

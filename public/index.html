@@ -1,0 +1,334 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HireMe.ai – Land Your Dream Job with AI</title>
+    <meta name="description" content="5 powerful AI tools that write cover letters, analyze resumes, prep interviews, and get you hired 10x faster.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="landing.css">
+</head>
+<body>
+
+<!-- ── CANVAS BACKGROUND ── -->
+<canvas id="particleCanvas"></canvas>
+
+<!-- ── NAVBAR ── -->
+<nav class="nav" id="nav">
+    <a href="/" class="nav-brand">
+        <img src="logo.png" alt="HireMe.ai" class="nav-logo-img">
+        <span>HireMe<em>.ai</em></span>
+    </a>
+    <div class="nav-links">
+        <a href="#tools">Tools</a>
+        <a href="#how">How It Works</a>
+        <a href="#pricing">Pricing</a>
+    </div>
+    <div class="nav-actions">
+        <a href="login.html" class="btn-nav-ghost">Sign In</a>
+        <a href="register.html" class="btn-nav-primary">Start Free <i class="ri-arrow-right-line"></i></a>
+    </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-chip"><i class="ri-sparkling-2-fill"></i> Powered by GPT-4 · Used by 50,000+ job seekers</div>
+        <h1 class="hero-title">
+            Stop writing.<br>
+            Start <span class="typed-wrapper"><span id="typed" class="typed-text">getting hired.</span></span>
+        </h1>
+        <p class="hero-desc">10 powerful AI tools that write cover letters, analyze resumes, prep for interviews, and get you the offer — in under 30 seconds each.</p>
+        <div class="hero-cta">
+            <a href="register.html" class="btn-hero-primary">
+                <i class="ri-magic-2-line"></i> Try All 10 Tools Free
+            </a>
+            <a href="#tools" class="btn-hero-ghost">
+                <i class="ri-apps-2-line"></i> Browse Tools
+            </a>
+        </div>
+        <div class="hero-proof">
+            <div class="proof-avatars">
+                <div class="proof-avatar" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">A</div>
+                <div class="proof-avatar" style="background:linear-gradient(135deg,#a855f7,#ec4899)">J</div>
+                <div class="proof-avatar" style="background:linear-gradient(135deg,#06b6d4,#6366f1)">M</div>
+                <div class="proof-avatar" style="background:linear-gradient(135deg,#10b981,#06b6d4)">S</div>
+            </div>
+            <div class="proof-text"><strong>4,200+</strong> people landed jobs this month</div>
+        </div>
+    </div>
+    <div class="hero-visual">
+        <div class="floating-card card-1 glass-card-float">
+            <div class="fc-icon" style="color:#6366f1;"><i class="ri-file-text-line"></i></div>
+            <div><div class="fc-title">Cover Letter</div><div class="fc-sub">Generated in 8s</div></div>
+            <div class="fc-check"><i class="ri-checkbox-circle-fill"></i></div>
+        </div>
+        <div class="floating-card card-2 glass-card-float">
+            <div class="fc-icon" style="color:#a855f7;"><i class="ri-bar-chart-grouped-line"></i></div>
+            <div><div class="fc-title">Resume Score</div><div class="fc-sub">87/100 — Strong</div></div>
+            <div class="fc-score">87</div>
+        </div>
+        <div class="floating-card card-3 glass-card-float">
+            <div class="fc-icon" style="color:#06b6d4;"><i class="ri-question-answer-line"></i></div>
+            <div><div class="fc-title">Interview Prep</div><div class="fc-sub">8 Q&As ready</div></div>
+            <div class="fc-check" style="color:#06b6d4;"><i class="ri-checkbox-circle-fill"></i></div>
+        </div>
+        <div class="hero-mockup glass-card-float">
+            <div class="mockup-bar"><span></span><span></span><span></span></div>
+            <div class="mockup-content">
+                <div class="mockup-line w80"></div>
+                <div class="mockup-line w60"></div>
+                <div class="mockup-line w90"></div>
+                <div class="mockup-line w50"></div>
+                <div class="mockup-line w75"></div>
+                <div class="mockup-line w40"></div>
+                <div class="mockup-line w85"></div>
+                <div class="mockup-cursor"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── SOCIAL PROOF BAR ── -->
+<div class="proof-bar">
+    <div class="proof-bar-inner">
+        <div class="proof-item"><i class="ri-google-fill" style="color:#ea4335;"></i> Google</div>
+        <div class="proof-divider"></div>
+        <div class="proof-item"><i class="ri-microsoft-fill" style="color:#0078d4;"></i> Microsoft</div>
+        <div class="proof-divider"></div>
+        <div class="proof-item"><i class="ri-amazon-fill" style="color:#ff9900;"></i> Amazon</div>
+        <div class="proof-divider"></div>
+        <div class="proof-item"><i class="ri-apple-fill"></i> Apple</div>
+        <div class="proof-divider"></div>
+        <div class="proof-item"><i class="ri-meta-fill" style="color:#0866ff;"></i> Meta</div>
+        <div class="proof-divider"></div>
+        <div class="proof-item"><i class="ri-netflix-fill" style="color:#e50914;"></i> Netflix</div>
+        <div class="proof-divider"></div>
+        <div class="proof-item"><i class="ri-spotify-fill" style="color:#1db954;"></i> Spotify</div>
+    </div>
+    <p class="proof-bar-label">Loved by job seekers at top companies worldwide</p>
+</div>
+
+<!-- ── TOOLS ── -->
+<section class="section tools-section" id="tools">
+    <div class="section-label"><i class="ri-apps-2-line"></i> 10 AI TOOLS</div>
+    <h2 class="section-title">Everything you need to <span class="g-text">get the job</span></h2>
+    <p class="section-desc">One subscription unlocks all 10 AI-powered career tools. Each designed to save you hours and maximize your chances.</p>
+    <div class="tools-grid">
+        <div class="tool-card tool-featured">
+            <div class="tc-icon"><i class="ri-file-text-line"></i></div>
+            <h3>Cover Letter Generator</h3>
+            <p>Tailored, ATS-optimized cover letters written in seconds based on your CV and the job description.</p>
+            <div class="tc-tag"><i class="ri-flashlight-line"></i> Most Used</div>
+        </div>
+        <div class="tool-card">
+            <div class="tc-icon" style="background:rgba(168,85,247,0.12);color:#a855f7;"><i class="ri-bar-chart-grouped-line"></i></div>
+            <h3>Resume Analyzer</h3>
+            <p>Get an AI score, strength breakdown, and specific actionable improvements to your CV.</p>
+        </div>
+        <div class="tool-card">
+            <div class="tc-icon" style="background:rgba(6,182,212,0.12);color:#06b6d4;"><i class="ri-question-answer-line"></i></div>
+            <h3>Interview Prep</h3>
+            <p>Generate the top 8 interview questions for any role with full ideal-answer examples using STAR method.</p>
+        </div>
+        <div class="tool-card">
+            <div class="tc-icon" style="background:rgba(16,185,129,0.12);color:#10b981;"><i class="ri-linkedin-box-line"></i></div>
+            <h3>LinkedIn Summary</h3>
+            <p>Write a compelling LinkedIn "About" section that attracts recruiters and stands out from the crowd.</p>
+        </div>
+        <div class="tool-card">
+            <div class="tc-icon" style="background:rgba(251,191,36,0.12);color:#fbbf24;"><i class="ri-mail-send-line"></i></div>
+            <h3>Cold Email to Recruiter</h3>
+            <p>Craft a punchy, personalized cold email to recruiters that actually gets responses.</p>
+        </div>
+        <div class="tool-card">
+            <div class="tc-icon" style="background:rgba(239,68,68,0.12);color:#ef4444;"><i class="ri-money-dollar-circle-line"></i></div>
+            <h3>Salary Negotiation</h3>
+            <p>Write a confident, respectful salary counter-offer email backed by your market value.</p>
+        </div>
+        <div class="tool-card">
+            <div class="tc-icon" style="background:rgba(99,102,241,0.12);color:#818cf8;"><i class="ri-mail-check-line"></i></div>
+            <h3>Thank You Email</h3>
+            <p>Send the perfect post-interview thank you note that keeps you top-of-mind with hiring managers.</p>
+        </div>
+        <div class="tool-card">
+            <div class="tc-icon" style="background:rgba(168,85,247,0.12);color:#c084fc;"><i class="ri-user-star-line"></i></div>
+            <h3>Professional Bio</h3>
+            <p>Generate a polished personal bio for your website, portfolio, Twitter, or conference profile.</p>
+        </div>
+        <div class="tool-card">
+            <div class="tc-icon" style="background:rgba(6,182,212,0.12);color:#67e8f9;"><i class="ri-focus-3-line"></i></div>
+            <h3>Skills Gap Analyzer</h3>
+            <p>Discover exactly which skills are missing from your CV for your target role and how to close the gap.</p>
+        </div>
+        <div class="tool-card tool-cta-card">
+            <div class="tc-icon" style="background:rgba(255,255,255,0.08);color:#fff;"><i class="ri-add-circle-line"></i></div>
+            <h3>More Tools Coming</h3>
+            <p>We launch new AI career tools every month. Upgrade to Pro and get early access to all new tools.</p>
+            <a href="register.html" class="tc-btn">Get Early Access <i class="ri-arrow-right-line"></i></a>
+        </div>
+    </div>
+</section>
+
+<!-- ── STATS ── -->
+<section class="stats-section">
+    <div class="stats-grid">
+        <div class="stat-item">
+            <div class="stat-num" data-target="50000">0</div>
+            <div class="stat-label">Letters Generated</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num" data-target="4200">0</div>
+            <div class="stat-label">Jobs Landed</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num" data-target="10">0</div>
+            <div class="stat-label">AI Tools</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num">4.9<span style="font-size:2rem">★</span></div>
+            <div class="stat-label">Average Rating</div>
+        </div>
+    </div>
+</section>
+
+<!-- ── HOW IT WORKS ── -->
+<section class="section" id="how">
+    <div class="section-label"><i class="ri-route-line"></i> HOW IT WORKS</div>
+    <h2 class="section-title">Three steps to <span class="g-text">your offer</span></h2>
+    <div class="steps-row">
+        <div class="step-card">
+            <div class="step-num">01</div>
+            <div class="step-icon"><i class="ri-user-add-line"></i></div>
+            <h3>Create Free Account</h3>
+            <p>Sign up in under 30 seconds. No credit card required. Get 10 free credits instantly to try any tool.</p>
+        </div>
+        <div class="step-arrow"><i class="ri-arrow-right-line"></i></div>
+        <div class="step-card">
+            <div class="step-num">02</div>
+            <div class="step-icon"><i class="ri-file-upload-line"></i></div>
+            <h3>Pick a Tool & Input</h3>
+            <p>Choose any of our 10 AI tools. Paste your resume and the job description. Takes 10 seconds.</p>
+        </div>
+        <div class="step-arrow"><i class="ri-arrow-right-line"></i></div>
+        <div class="step-card">
+            <div class="step-num">03</div>
+            <div class="step-icon"><i class="ri-send-plane-2-line"></i></div>
+            <h3>Apply & Get Hired</h3>
+            <p>Copy your AI-crafted content and send it. Most users report getting more callbacks within a week.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ── TESTIMONIALS ── -->
+<section class="section testi-section">
+    <div class="section-label"><i class="ri-chat-quote-line"></i> TESTIMONIALS</div>
+    <h2 class="section-title">Real results from <span class="g-text">real people</span></h2>
+    <p class="section-desc">Thousands of people have landed their dream jobs using HireMe.ai. Here's what they say.</p>
+    <div class="testi-slider-wrap">
+        <div class="testi-track" id="testiTrack"></div>
+    </div>
+    <div class="testi-nav">
+        <button class="testi-btn" id="testiBtnPrev"><i class="ri-arrow-left-s-line"></i></button>
+        <div class="testi-dots" id="testiDots"></div>
+        <button class="testi-btn" id="testiBtnNext"><i class="ri-arrow-right-s-line"></i></button>
+    </div>
+</section>
+
+<!-- ── PRICING ── -->
+<section class="section" id="pricing">
+    <div class="section-label"><i class="ri-price-tag-3-line"></i> PRICING</div>
+    <h2 class="section-title">Start free, scale <span class="g-text">when you're ready</span></h2>
+    <p class="section-desc">No hidden fees. Cancel anytime. Every plan includes all 10 AI tools.</p>
+    <div class="pricing-grid">
+        <div class="pricing-card">
+            <div class="pc-plan">Starter</div>
+            <div class="pc-price">$0<span>/mo</span></div>
+            <div class="pc-desc">Perfect for trying it out</div>
+            <ul class="pc-features">
+                <li><i class="ri-check-line"></i> 10 free credits</li>
+                <li><i class="ri-check-line"></i> All 10 AI tools</li>
+                <li><i class="ri-check-line"></i> 3 languages</li>
+                <li class="off"><i class="ri-close-line"></i> Unlimited generations</li>
+                <li class="off"><i class="ri-close-line"></i> Priority AI (GPT-4)</li>
+            </ul>
+            <a href="register.html" class="pc-btn pc-btn-ghost">Get Started Free</a>
+        </div>
+        <div class="pricing-card pricing-popular">
+            <div class="pc-badge">⚡ Most Popular</div>
+            <div class="pc-plan">Pro</div>
+            <div class="pc-price">$1.99<span>/mo</span></div>
+            <div class="pc-desc">For serious job seekers</div>
+            <ul class="pc-features">
+                <li><i class="ri-check-line"></i> Unlimited credits</li>
+                <li><i class="ri-check-line"></i> All 10 AI tools</li>
+                <li><i class="ri-check-line"></i> 30+ languages</li>
+                <li><i class="ri-check-line"></i> Priority AI (GPT-4)</li>
+                <li><i class="ri-check-line"></i> ATS keyword analysis</li>
+            </ul>
+            <a href="register.html" class="pc-btn pc-btn-primary">Get Pro Access</a>
+        </div>
+        <div class="pricing-card">
+            <div class="pc-plan">Team</div>
+            <div class="pc-price">$2.99<span>/mo</span></div>
+            <div class="pc-desc">For coaches & agencies</div>
+            <ul class="pc-features">
+                <li><i class="ri-check-line"></i> Everything in Pro</li>
+                <li><i class="ri-check-line"></i> 10 team members</li>
+                <li><i class="ri-check-line"></i> Bulk generation</li>
+                <li><i class="ri-check-line"></i> API access</li>
+                <li><i class="ri-check-line"></i> Priority support</li>
+            </ul>
+            <a href="register.html" class="pc-btn pc-btn-ghost">Get Team Plan</a>
+        </div>
+    </div>
+</section>
+
+<!-- ── CTA BANNER ── -->
+<section class="cta-banner">
+    <div class="cta-grid-overlay"></div>
+    <div class="cta-glow"></div>
+    <div class="cta-content">
+        <div class="section-label" style="margin:0 auto 1.5rem;"><i class="ri-rocket-2-line"></i> GET STARTED TODAY</div>
+        <h2>Ready to land your dream job?</h2>
+        <p>Join 50,000+ job seekers already using HireMe.ai.<br>10 AI tools. Instant results. No credit card needed.</p>
+        <div class="cta-features-row">
+            <div class="cta-feat"><i class="ri-check-line"></i> 10 free credits instantly</div>
+            <div class="cta-feat"><i class="ri-check-line"></i> All 10 AI tools unlocked</div>
+            <div class="cta-feat"><i class="ri-check-line"></i> ATS-optimized outputs</div>
+            <div class="cta-feat"><i class="ri-check-line"></i> Cancel anytime</div>
+        </div>
+        <div class="cta-btns">
+            <a href="register.html" class="btn-cta-primary"><i class="ri-magic-2-line"></i> Start Free — 10 Credits</a>
+            <a href="#tools" class="btn-cta-ghost"><i class="ri-apps-2-line"></i> Browse All Tools</a>
+        </div>
+        <p class="cta-note">✓ No credit card &nbsp;&nbsp; ✓ Free forever plan &nbsp;&nbsp; ✓ Upgrade anytime</p>
+    </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+    <div class="footer-top">
+        <div class="footer-brand">
+            <a href="/" class="footer-logo">
+                <img src="logo.png" alt="Logo" style="height:28px;">
+                HireMe<span>.ai</span>
+            </a>
+            <p>The AI career platform that actually gets you hired.</p>
+        </div>
+        <div class="footer-links-grid">
+            <div><h4>Product</h4><a href="#tools">Tools</a><a href="#pricing">Pricing</a><a href="dashboard.html">Dashboard</a></div>
+            <div><h4>Company</h4><a href="page.html?p=about">About</a><a href="page.html?p=blog">Blog</a><a href="page.html?p=contact">Contact</a></div>
+            <div><h4>Legal</h4><a href="page.html?p=privacy">Privacy</a><a href="page.html?p=terms">Terms</a><a href="page.html?p=cookies">Cookies</a></div>
+        </div>
+    </div>
+    <div class="footer-bottom"><span>© 2025 HireMe.ai — All rights reserved.</span><span>Made with <i class="ri-heart-fill" style="color:#ef4444;"></i> for job seekers worldwide</span></div>
+</footer>
+
+<script src="landing.js"></script>
+</body>
+</html>
+
+

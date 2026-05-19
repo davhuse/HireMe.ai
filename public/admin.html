@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel – HireMe.ai</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <div class="bg-fx"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+
+    <aside class="sidebar">
+        <a href="/" class="sidebar-logo"><i class="ri-shield-star-line"></i> Admin<span>.ai</span></a>
+        <nav class="sidebar-nav">
+            <button class="nav-item active" data-section="overview"><i class="ri-dashboard-line"></i> Overview</button>
+            <button class="nav-item" data-section="users"><i class="ri-group-line"></i> Users</button>
+            <button class="nav-item" data-section="tickets"><i class="ri-customer-service-2-line"></i> Support Tickets</button>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="/" class="nav-item nav-item-link"><i class="ri-home-line"></i> Back to Site</a>
+            <button class="nav-item nav-item-link" id="adminLogout"><i class="ri-logout-box-r-line"></i> Logout</button>
+        </div>
+    </aside>
+
+    <main class="main-content">
+
+        <!-- OVERVIEW -->
+        <div class="section active" id="section-overview">
+            <div class="page-header"><h1>Dashboard Overview</h1><p>Platform health and key metrics at a glance.</p></div>
+            <div class="stats-grid">
+                <div class="stat-card"><div class="stat-icon" style="background:rgba(99,102,241,0.15);color:#818cf8;"><i class="ri-group-line"></i></div><div class="stat-info"><div class="stat-num" id="stat-users">–</div><div class="stat-label">Total Users</div></div></div>
+                <div class="stat-card"><div class="stat-icon" style="background:rgba(16,185,129,0.12);color:#34d399;"><i class="ri-magic-line"></i></div><div class="stat-info"><div class="stat-num" id="stat-generations">–</div><div class="stat-label">Credits Used</div></div></div>
+                <div class="stat-card"><div class="stat-icon" style="background:rgba(251,191,36,0.12);color:#fbbf24;"><i class="ri-ticket-line"></i></div><div class="stat-info"><div class="stat-num" id="stat-tickets">–</div><div class="stat-label">Open Tickets</div></div></div>
+                <div class="stat-card"><div class="stat-icon" style="background:rgba(168,85,247,0.12);color:#c084fc;"><i class="ri-coin-dollar-line"></i></div><div class="stat-info"><div class="stat-num">$0</div><div class="stat-label">Revenue (MRR)</div></div></div>
+            </div>
+            <div class="section-card">
+                <div class="card-header"><h3><i class="ri-group-line"></i> Recent Registrations</h3></div>
+                <div id="recent-users-list"><div class="loading-row">Loading...</div></div>
+            </div>
+        </div>
+
+        <!-- USERS -->
+        <div class="section" id="section-users">
+            <div class="page-header"><h1>User Management</h1><p>View and manage all registered users.</p></div>
+            <div class="section-card">
+                <div class="card-header">
+                    <h3><i class="ri-group-line"></i> All Users</h3>
+                    <span class="card-badge" id="userCountBadge">–</span>
+                </div>
+                <div class="table-wrap">
+                    <table class="data-table">
+                        <thead><tr><th>Name</th><th>Email</th><th>Credits</th><th>Joined</th><th>Actions</th></tr></thead>
+                        <tbody id="usersTableBody"><tr><td colspan="5" class="loading-row">Loading...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TICKETS -->
+        <div class="section" id="section-tickets">
+            <div class="page-header"><h1>Support Tickets</h1><p>View and respond to user support requests.</p></div>
+            <div class="section-card">
+                <div class="card-header"><h3><i class="ri-customer-service-2-line"></i> All Tickets</h3><span class="card-badge" id="ticketCountBadge">–</span></div>
+                <div id="ticketsList"><div class="loading-row">Loading...</div></div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Ticket Reply Modal -->
+    <div class="modal-overlay hidden" id="ticketModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modalTitle">Ticket Details</h3>
+                <button onclick="closeModal()" class="modal-close"><i class="ri-close-line"></i></button>
+            </div>
+            <div class="modal-body">
+                <div id="modalTicketDetails"></div>
+                <div class="form-group" style="margin-top:1.5rem;">
+                    <label><i class="ri-reply-line"></i> Admin Reply</label>
+                    <textarea id="adminReply" placeholder="Type your reply to the user..." style="height:120px;"></textarea>
+                </div>
+                <div style="display:flex;gap:1rem;margin-top:1rem;">
+                    <button class="btn-primary-sm" onclick="sendReply()"><i class="ri-send-plane-line"></i> Send Reply & Close</button>
+                    <button class="btn-ghost-sm" onclick="closeModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
