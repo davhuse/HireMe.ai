@@ -256,7 +256,8 @@ function applyAuthState() {
         if (logoutBtn) logoutBtn.classList.remove('hidden');
         if (primary) {
             primary.href = 'dashboard.html';
-            primary.innerHTML = `${user.name ? user.name.split(' ')[0] : t.dashboard} <i class="ri-dashboard-line"></i>`;
+            primary.classList.add('account-pill');
+            primary.innerHTML = `<i class="ri-user-3-line"></i><span>${user.name ? user.name.split(' ')[0] : t.dashboard}</span><i class="ri-dashboard-line"></i>`;
         }
         if (heroBtn) {
             heroBtn.href = 'dashboard.html';
@@ -267,6 +268,7 @@ function applyAuthState() {
         if (logoutBtn) logoutBtn.classList.add('hidden');
         if (primary) {
             primary.href = 'register.html';
+            primary.classList.remove('account-pill');
             primary.innerHTML = `${t.startFree} <i class="ri-arrow-right-line"></i>`;
         }
     }
