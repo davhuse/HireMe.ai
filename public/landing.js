@@ -72,7 +72,7 @@ window.addEventListener('scroll', () => {
 ───────────────────────────── */
 const HERO_TYPED = {
     en: ['getting hired.', 'landing interviews.', 'writing cover letters.', 'acing interviews.', 'negotiating salary.'],
-    tr: ['ise girmeye.', 'mulakat kazanmaya.', 'on yazi yazmaya.', 'mulakati gecmeye.', 'maas pazarligina.']
+    tr: ['işe girmeye.', 'mülakat kazanmaya.', 'ön yazı yazmaya.', 'mülakatı geçmeye.', 'maaş pazarlığına.']
 };
 let pi = 0, ci = 0, deleting = false;
 const typedEl = document.getElementById('typed');
@@ -166,33 +166,33 @@ const I18N = {
         ctaDesc: 'Join 50,000+ job seekers already using HireMe.ai.<br>10 AI tools. Instant results. No credit card needed.'
     },
     tr: {
-        signIn: 'Giris Yap',
-        startFree: 'Ucretsiz Dene',
+        signIn: 'Giriş Yap',
+        startFree: 'Ücretsiz Dene',
         dashboard: 'Panel',
-        logout: 'Cikis Yap',
-        navTools: 'Araclar',
-        navHow: 'Nasil Calisir',
-        navPricing: 'Fiyatlandirma',
-        heroChip: 'GPT-4 destekli · 50.000+ is arayan kullaniyor',
-        heroTitleLead: 'Yazmayi birak.',
-        browseTools: 'Araclari Incele',
+        logout: 'Çıkış Yap',
+        navTools: 'Araçlar',
+        navHow: 'Nasıl Çalışır',
+        navPricing: 'Fiyatlandırma',
+        heroChip: 'GPT-4 destekli · 50.000+ iş arayan kullanıyor',
+        heroTitleLead: 'Yazmayı bırak.',
+        browseTools: 'Araçları İncele',
         heroDashboard: 'Panele Git',
-        heroProof: 'kisi bu ay ise yerlesti',
-        proofBarLabel: 'Dunya capinda ust duzey sirketleri hedefleyen adaylarin tercihi',
+        heroProof: 'kişi bu ay işe yerleşti',
+        proofBarLabel: 'Dünya çapında üst düzey şirketleri hedefleyen adayların tercihi',
         toolsLabel: '10 YAPAY ZEKA ARACI',
-        toolsTitleLead: 'Ise girmek icin ihtiyacin olan',
-        toolsTitleAccent: 'her sey',
-        toolsDesc: 'Tek abonelikle 10 AI kariyer aracinin tamami acilir. Saatlerini geri kazandirir ve sansini guclendirir.',
-        howLabel: 'NASIL CALISIR',
+        toolsTitleLead: 'İşe girmek için ihtiyacın olan',
+        toolsTitleAccent: 'her şey',
+        toolsDesc: 'Tek abonelikle 10 AI kariyer aracının tamamı açılır. Saatlerini geri kazandırır ve şansını güçlendirir.',
+        howLabel: 'NASIL ÇALIŞIR',
         howTitleLead: 'Teklife giden',
-        howTitleAccent: 'uc adim',
-        pricingLabel: 'FIYATLANDIRMA',
-        pricingTitleLead: 'Ucretsiz basla,',
-        pricingTitleAccent: 'hazir oldugunda buyut',
-        pricingDesc: 'Gizli ucret yok. Istedigin zaman iptal et. Her planda tum 10 AI araci var.',
-        ctaLabel: 'BUGUN BASLA',
-        ctaTitle: 'Hayalindeki ise hazir misin?',
-        ctaDesc: 'HireMe.ai kullanan 50.000+ is arayana katil.<br>10 AI araci. Aninda sonuc. Kredi karti gerekmez.'
+        howTitleAccent: 'üç adım',
+        pricingLabel: 'FİYATLANDIRMA',
+        pricingTitleLead: 'Ücretsiz başla,',
+        pricingTitleAccent: 'hazır olduğunda büyüt',
+        pricingDesc: 'Gizli ücret yok. İstediğin zaman iptal et. Her planda tüm 10 AI aracı var.',
+        ctaLabel: 'BUGÜN BAŞLA',
+        ctaTitle: 'Hayalindeki işe hazır mısın?',
+        ctaDesc: 'HireMe.ai kullanan 50.000+ iş arayana katıl.<br>10 AI aracı. Anında sonuç. Kredi kartı gerekmez.'
     }
 };
 
@@ -212,7 +212,11 @@ function applyLanguage() {
     if (primary && !localStorage.getItem('hm_token')) {
         primary.innerHTML = `${t.startFree} <i class="ri-arrow-right-line"></i>`;
     }
-    if (logoutBtn) logoutBtn.textContent = t.logout;
+    if (logoutBtn) {
+        const logoutText = logoutBtn.querySelector('span');
+        if (logoutText) logoutText.textContent = t.logout;
+        else logoutBtn.textContent = t.logout;
+    }
     if (heroGhost) heroGhost.innerHTML = `<i class="ri-apps-2-line"></i> ${t.browseTools}`;
     if (heroPrimary && localStorage.getItem('hm_token')) {
         heroPrimary.innerHTML = `<i class="ri-dashboard-line"></i> ${t.heroDashboard}`;
@@ -283,6 +287,7 @@ document.getElementById('langSelect')?.addEventListener('change', (e) => {
 document.getElementById('navLogout')?.addEventListener('click', () => {
     localStorage.removeItem('hm_token');
     localStorage.removeItem('hm_user');
+    applyLanguage();
     applyAuthState();
 });
 

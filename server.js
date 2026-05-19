@@ -421,19 +421,11 @@ app.post('/api/user/profile', authMiddleware, async (req, res) => {
     } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// 4. Upgrade Plan (Stripe Simulation)
+// 4. Upgrade Plan
 app.post('/api/user/upgrade', authMiddleware, async (req, res) => {
-    try {
-        const user = await User.findOne({ email: req.user.email });
-        if (!user) return res.status(404).json({ error: 'User not found' });
-        
-        user.plan = 'pro';
-        user.credits = 999999; // Unlimited
-        await user.save();
-        
-        const { password: _, history, ...safeUser } = user.toObject();
-        res.json({ success: true, user: safeUser });
-    } catch (e) { res.status(500).json({ error: e.message }); }
+    res.status(402).json({
+        error: 'Payments are not configured yet. Pro upgrades are temporarily disabled.'
+    });
 });
 
 // ═══════════════════════════════════

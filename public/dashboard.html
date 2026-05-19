@@ -46,7 +46,7 @@
                 <div class="credit-label"><i class="ri-coin-line"></i> Credits Remaining</div>
                 <div class="credit-value" id="creditCount">–</div>
                 <div class="credit-bar"><div class="credit-fill" id="creditFill"></div></div>
-                <a href="index.html#pricing" class="upgrade-link">⚡ Upgrade Plan</a>
+                <a href="index.html#pricing" class="upgrade-link">View Plans</a>
             </div>
             <div class="user-info">
                 <div class="user-avatar" id="userAvatar">?</div>
@@ -340,14 +340,15 @@
                     <div class="form-group"><label>New Password (Optional)</label><input type="password" id="set-pass" class="custom-input" placeholder="Leave blank to keep current"></div>
                     <button class="btn-generate" onclick="saveSettings()"><i class="ri-save-line"></i> Save Changes</button>
                 </div>
-                <div class="output-side glass-card">
+                <div class="output-side glass-card billing-card">
                     <h3><i class="ri-vip-crown-line" style="color:#fbbf24;"></i> Subscription & Billing</h3>
-                    <div style="margin-top:1.5rem; background:rgba(99,102,241,0.08); border:1px solid rgba(99,102,241,0.2); border-radius:14px; padding:1.5rem;">
-                        <div style="font-size:0.9rem; color:var(--text-subtle);">Current Plan</div>
-                        <div style="font-size:1.8rem; font-weight:800; color:var(--text); margin-bottom:1rem; text-transform:capitalize;" id="set-plan">Starter</div>
-                        <div style="font-size:0.9rem; margin-bottom:0.5rem;"><i class="ri-coin-line" style="color:var(--primary);"></i> <span id="set-credits">10</span> credits remaining</div>
-                        <div class="credit-bar" style="margin-bottom:1.5rem;"><div class="credit-fill" id="set-fill" style="width:100%;"></div></div>
-                        <button class="btn-generate" style="width:100%;" onclick="openCheckoutModal()"><i class="ri-vip-crown-fill"></i> Upgrade to Pro</button>
+                    <div class="billing-summary">
+                        <div class="billing-kicker">Current Plan</div>
+                        <div class="billing-plan" id="set-plan">Starter</div>
+                        <div class="billing-credit-row"><i class="ri-coin-line"></i> <span id="set-credits">10</span> credits remaining</div>
+                        <div class="credit-bar"><div class="credit-fill" id="set-fill" style="width:100%;"></div></div>
+                        <div class="billing-note"><i class="ri-information-line"></i> Online payments are not connected yet, so Pro upgrades are paused for now.</div>
+                        <button class="btn-generate btn-disabled-upgrade" type="button" onclick="openCheckoutModal()"><i class="ri-vip-crown-fill"></i> Pro Coming Soon</button>
                     </div>
                 </div>
             </div>
@@ -378,11 +379,11 @@
                         <div class="faq-list">
                             <div class="faq-item">
                                 <div class="faq-q" onclick="toggleFaq(this)"><span>How do credits work?</span><i class="ri-arrow-down-s-line"></i></div>
-                                <div class="faq-a">Each AI generation uses 1 credit. Free accounts start with 10 credits. Upgrade to Pro for unlimited generations.</div>
+                                <div class="faq-a">Each AI generation uses 1 credit. Free accounts start with 10 credits. Pro billing is being prepared.</div>
                             </div>
                             <div class="faq-item">
                                 <div class="faq-q" onclick="toggleFaq(this)"><span>Can I upgrade later?</span><i class="ri-arrow-down-s-line"></i></div>
-                                <div class="faq-a">Yes! You can upgrade to Pro or Team at any time from the pricing page. Your data and history is preserved.</div>
+                                <div class="faq-a">Yes. Pro and Team upgrades will be available after payment checkout is connected. Your data and history will be preserved.</div>
                             </div>
                             <div class="faq-item">
                                 <div class="faq-q" onclick="toggleFaq(this)"><span>How long does generation take?</span><i class="ri-arrow-down-s-line"></i></div>
@@ -452,24 +453,15 @@
     <div class="modal-overlay" id="checkoutModal">
         <div class="modal-content" style="max-width:400px; padding:2rem;">
             <div class="modal-header" style="margin-bottom:1.5rem;">
-                <i class="ri-secure-payment-line" style="font-size:2.5rem; color:#10b981;"></i>
-                <h2 style="font-size:1.5rem;">Upgrade to Pro</h2>
-                <p>Unlimited credits, all tools. $1.99/mo.</p>
+                <i class="ri-secure-payment-line" style="font-size:2.5rem; color:#fbbf24;"></i>
+                <h2 style="font-size:1.5rem;">Pro is not active yet</h2>
+                <p>Payment checkout is being prepared. Your current plan will stay unchanged.</p>
             </div>
-            <div class="form-group">
-                <label>Card Number (Simulation)</label>
-                <input type="text" class="custom-input" placeholder="4242 4242 4242 4242" value="4242 4242 4242 4242" disabled>
+            <div style="background:rgba(251,191,36,0.1); color:#fbbf24; padding:0.8rem; border-radius:8px; font-size:0.85rem; margin-bottom:1.5rem; text-align:center;">
+                <i class="ri-information-line"></i> The old test upgrade is disabled, so free users cannot become Pro without payment.
             </div>
-            <div class="two-col" style="gap:1rem; height:auto; margin-bottom:1.5rem;">
-                <div class="form-group" style="margin-bottom:0;"><label>Expiry</label><input type="text" class="custom-input" value="12/26" disabled></div>
-                <div class="form-group" style="margin-bottom:0;"><label>CVC</label><input type="text" class="custom-input" value="123" disabled></div>
-            </div>
-            <div style="background:rgba(16,185,129,0.1); color:#10b981; padding:0.8rem; border-radius:8px; font-size:0.85rem; margin-bottom:1.5rem; text-align:center;">
-                <i class="ri-information-line"></i> This is a test environment simulation.
-            </div>
-            <div class="modal-btns">
-                <button class="btn-modal-back" onclick="closeCheckout()">Cancel</button>
-                <button class="btn-modal-next" onclick="submitCheckout()" id="btn-checkout" style="background:linear-gradient(135deg,#10b981,#059669);"><i class="ri-lock-fill"></i> Pay $1.99</button>
+            <div class="modal-btns" style="justify-content:flex-end;">
+                <button class="btn-modal-next" onclick="closeCheckout()" id="btn-checkout"><i class="ri-check-line"></i> Okay</button>
             </div>
         </div>
     </div>

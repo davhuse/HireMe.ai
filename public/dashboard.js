@@ -446,33 +446,7 @@ function closeCheckout() {
 }
 
 async function submitCheckout() {
-    const btn = document.getElementById('btn-checkout');
-    btn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Processing...';
-    btn.disabled = true;
-    
-    // Simulate network delay for payment processing
-    setTimeout(async () => {
-        try {
-            const res = await fetch('/api/user/upgrade', {
-                method: 'POST',
-                headers: { 'Authorization': `Bearer ${localStorage.getItem('hm_token')}` }
-            });
-            const data = await res.json();
-            if(data.success) {
-                currentUser = data.user;
-                localStorage.setItem('hm_user', JSON.stringify(currentUser));
-                initUI();
-                initSettings();
-                closeCheckout();
-                alert('Payment successful! Welcome to Pro.');
-            }
-        } catch(e) {
-            alert('Payment failed simulation.');
-        } finally {
-            btn.innerHTML = '<i class="ri-lock-fill"></i> Pay $1.99';
-            btn.disabled = false;
-        }
-    }, 1500);
+    closeCheckout();
 }
 
 // Hook settings panel open without relying on a global selectTool function

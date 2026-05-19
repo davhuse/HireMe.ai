@@ -146,6 +146,9 @@ textarea:focus, .custom-input:focus, .custom-select:focus { outline: none; borde
     .form-row { flex-direction: column; gap: 0.6rem; }
     .modal-content { margin: 1rem; padding: 1.2rem; max-width: none; width: calc(100% - 2rem); }
     .support-layout { grid-template-columns: 1fr; }
+    .billing-summary { padding: 1rem; border-radius: 12px; }
+    .billing-plan { font-size: 1.4rem; margin-bottom: 0.7rem; }
+    .billing-note { font-size: 0.8rem; }
 }
 
 /* �� NAV DIVIDER �� */
@@ -180,6 +183,17 @@ textarea:focus, .custom-input:focus, .custom-select:focus { outline: none; borde
 .ticket-badge { display: inline-flex; padding: 0.15rem 0.6rem; border-radius: 100px; font-size: 0.72rem; font-weight: 700; }
 .badge-open { background: rgba(99,102,241,0.15); color: #a5b4fc; }
 .badge-closed { background: rgba(16,185,129,0.12); color: #34d399; }
+
+/* Billing */
+.billing-summary { margin-top: 1.5rem; background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.2); border-radius: 14px; padding: 1.5rem; }
+.billing-kicker { font-size: 0.9rem; color: var(--text-subtle); }
+.billing-plan { font-size: 1.8rem; font-weight: 800; color: var(--text); margin-bottom: 1rem; text-transform: capitalize; }
+.billing-credit-row { font-size: 0.9rem; margin-bottom: 0.6rem; color: var(--text-subtle); }
+.billing-credit-row i { color: var(--primary); }
+.billing-summary .credit-bar { margin-bottom: 1rem; }
+.billing-note { display: flex; align-items: flex-start; gap: 0.5rem; background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.22); color: #fbbf24; border-radius: 10px; padding: 0.8rem; font-size: 0.84rem; line-height: 1.45; margin-bottom: 1rem; }
+.btn-disabled-upgrade { background: rgba(255,255,255,0.06); border: 1px solid var(--border-h); color: var(--text-subtle); box-shadow: none; }
+.btn-disabled-upgrade:hover:not(:disabled) { transform: none; box-shadow: none; background: rgba(255,255,255,0.08); }
 
 /* �� NAV SECTION LABEL �� */
 .nav-section-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); padding: 0.5rem 1rem 0.2rem; margin-top: 0.3rem; }
@@ -312,3 +326,9 @@ textarea:focus, .custom-input:focus, .custom-select:focus { outline: none; borde
 [data-theme="light"] .user-badge:hover { background: rgba(0,0,0,0.06); color: var(--text); }
 [data-theme="light"] .orb-1 { opacity: 0.15; }
 [data-theme="light"] .orb-2 { opacity: 0.15; }
+
+@media (max-width: 768px) {
+    .billing-summary { padding: 1rem; border-radius: 12px; }
+    .billing-plan { font-size: 1.4rem; margin-bottom: 0.7rem; }
+    .billing-note { font-size: 0.8rem; }
+}
