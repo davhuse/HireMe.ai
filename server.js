@@ -39,6 +39,20 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+let dbConnectPromise = null;
+async function ensureDbConnection() {
+    if (mongoose.connection.readyState === 1) return;
+    if (!dbConnectPromise) {
+        dbConnectPromise = mongoose.connect(MONGODB_URI, {
+            serverSelectionTimeoutMS: 5000,
+            maxPoolSize: 10
+        }).finally(() => {
+            dbConnectPromise = null;
+        });
+    }
+    await dbConnectPromise;
+}
+
 function getOAuthBaseUrl(req) {
     if (OAUTH_BASE_URL) return OAUTH_BASE_URL.replace(/\/+$/, '');
     const forwardedProto = req.headers['x-forwarded-proto']?.split(',')[0]?.trim();
@@ -157,6 +171,7 @@ async function deductCredit(email) {
 // ═══════════════════════════════════
 app.post('/api/auth/register', async (req, res) => {
     try {
+        await ensureDbConnection();
         const { name, email, password } = req.body;
         if (!name || !email || !password) return res.status(400).json({ error: 'All fields required.' });
         
@@ -173,6 +188,7 @@ app.post('/api/auth/register', async (req, res) => {
 
 app.post('/api/auth/login', async (req, res) => {
     try {
+        await ensureDbConnection();
         const { email, password } = req.body;
         const user = await User.findOne({ email });
         if (!user || !await bcrypt.compare(password, user.password)) {
@@ -186,6 +202,7 @@ app.post('/api/auth/login', async (req, res) => {
 
 app.get('/api/auth/me', authMiddleware, async (req, res) => {
     try {
+        await ensureDbConnection();
         const user = await User.findOne({ email: req.user.email });
         if (!user) return res.status(404).json({ error: 'User not found' });
         res.json({ name: user.name, email: user.email, credits: user.credits, plan: user.plan, hasCompletedOnboarding: user.hasCompletedOnboarding });
@@ -208,6 +225,7 @@ app.get('/api/auth/google/callback', async (req, res) => {
     if (!code) return res.redirect('/login.html?error=no_code');
     
     try {
+        await ensureDbConnection();
         const baseUrl = getOAuthBaseUrl(req);
         // Exchange code for token
         const redirectUri = `${baseUrl}/api/auth/google/callback`;
@@ -265,6 +283,7 @@ app.get('/api/auth/github/callback', async (req, res) => {
     if (!code) return res.redirect('/login.html?error=no_code');
     
     try {
+        await ensureDbConnection();
         const baseUrl = getOAuthBaseUrl(req);
         const redirectUri = `${baseUrl}/api/auth/github/callback`;
         const tokenRes = await fetch('https://github.com/login/oauth/access_token', {
