@@ -14,7 +14,11 @@ if (fs.existsSync(envFile)) {
         const t = line.trim();
         if (t && !t.startsWith('#')) {
             const i = t.indexOf('=');
-            if (i > 0) process.env[t.substring(0, i).trim()] = t.substring(i + 1).trim();
+            if (i > 0) {
+                const key = t.substring(0, i).trim();
+                const value = t.substring(i + 1).trim();
+                if (!process.env[key]) process.env[key] = value;
+            }
         }
     }
 }
