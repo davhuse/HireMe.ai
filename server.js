@@ -40,9 +40,16 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ── Mongoose Connection ──
-mongoose.connect(MONGODB_URI)
-    .then(() => console.log('✅ MongoDB Connected'))
-    .catch(err => console.error('❌ MongoDB Connection Error:', err));
+mongoose.connection.on('connecting', () => console.log('🔄 MongoDB Connecting...'));
+mongoose.connection.on('connected', () => console.log('✅ MongoDB Connected successfully!'));
+mongoose.connection.on('error', (err) => console.error('❌ MongoDB Connection Error:', err));
+mongoose.connection.on('disconnected', () => console.log('🔌 MongoDB Disconnected!'));
+
+mongoose.connect(MONGODB_URI, {
+    serverSelectionTimeoutMS: 5000 // Timeout after 5s instead of 10s to fail faster
+})
+.then(() => console.log('✅ Mongoose connection initialized'))
+.catch(err => console.error('❌ Mongoose initial connection error:', err));
 
 // ── Mongoose Models ──
 const historySchema = new mongoose.Schema({
