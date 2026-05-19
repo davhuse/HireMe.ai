@@ -29,11 +29,11 @@ const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/hireme
 const FREE_CREDITS = 10;
 
 // OAuth
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
-const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
-const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
-const OAUTH_BASE_URL = process.env.OAUTH_BASE_URL || `http://localhost:${PORT}`;
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '580593981475-0vg5vf3d6kskj2489hvndegmhakbf29q.apps.googleusercontent.com';
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || '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';
+const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID || 'Ov23lisPmyiSO7ssd2va';
+const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET || '4e45ada4741bc2be5fbe7eda3e5d9088de83eb32';
+const OAUTH_BASE_URL = process.env.OAUTH_BASE_URL || 'https://hireme-ai-e0a5.onrender.com';
 
 app.use(cors());
 app.use(express.json());
