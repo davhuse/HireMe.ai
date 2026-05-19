@@ -33,11 +33,19 @@ const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '580593981475-0vg5vf3d6
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || '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';
 const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID || 'Ov23lisPmyiSO7ssd2va';
 const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET || '4e45ada4741bc2be5fbe7eda3e5d9088de83eb32';
-const OAUTH_BASE_URL = process.env.OAUTH_BASE_URL || 'https://hireme-ai-e0a5.onrender.com';
+const OAUTH_BASE_URL = process.env.OAUTH_BASE_URL || '';
 
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+
+function getOAuthBaseUrl(req) {
+    if (OAUTH_BASE_URL) return OAUTH_BASE_URL.replace(/\/+$/, '');
+    const forwardedProto = req.headers['x-forwarded-proto']?.split(',')[0]?.trim();
+    const protocol = forwardedProto || req.protocol || 'http';
+    const host = req.headers['x-forwarded-host'] || req.get('host');
+    return `${protocol}://${host}`;
+}
 
 // ── Mongoose Connection ──
 mongoose.connection.on('connecting', () => console.log('🔄 MongoDB Connecting...'));
@@ -186,8 +194,12 @@ app.get('/api/auth/me', authMiddleware, async (req, res) => {
 
 // ── Google OAuth ──
 app.get('/api/auth/google', (req, res) => {
-    const redirectUri = encodeURIComponent(`${OAUTH_BASE_URL}/api/auth/google/callback`);
-    const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${redirectUri}&response_type=code&scope=profile email`;
+    if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) {
+        return res.status(500).send('Google OAuth is not configured on server.');
+    }
+    const baseUrl = getOAuthBaseUrl(req);
+    const redirectUri = encodeURIComponent(`${baseUrl}/api/auth/google/callback`);
+    const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${redirectUri}&response_type=code&scope=openid%20profile%20email`;
     res.redirect(url);
 });
 
@@ -196,8 +208,9 @@ app.get('/api/auth/google/callback', async (req, res) => {
     if (!code) return res.redirect('/login.html?error=no_code');
     
     try {
+        const baseUrl = getOAuthBaseUrl(req);
         // Exchange code for token
-        const redirectUri = `${OAUTH_BASE_URL}/api/auth/google/callback`;
+        const redirectUri = `${baseUrl}/api/auth/google/callback`;
         const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -238,7 +251,11 @@ app.get('/api/auth/google/callback', async (req, res) => {
 
 // ── GitHub OAuth ──
 app.get('/api/auth/github', (req, res) => {
-    const redirectUri = encodeURIComponent(`${OAUTH_BASE_URL}/api/auth/github/callback`);
+    if (!GITHUB_CLIENT_ID || !GITHUB_CLIENT_SECRET) {
+        return res.status(500).send('GitHub OAuth is not configured on server.');
+    }
+    const baseUrl = getOAuthBaseUrl(req);
+    const redirectUri = encodeURIComponent(`${baseUrl}/api/auth/github/callback`);
     const url = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${redirectUri}&scope=user:email`;
     res.redirect(url);
 });
@@ -248,6 +265,8 @@ app.get('/api/auth/github/callback', async (req, res) => {
     if (!code) return res.redirect('/login.html?error=no_code');
     
     try {
+        const baseUrl = getOAuthBaseUrl(req);
+        const redirectUri = `${baseUrl}/api/auth/github/callback`;
         const tokenRes = await fetch('https://github.com/login/oauth/access_token', {
             method: 'POST',
             headers: { 
@@ -257,7 +276,8 @@ app.get('/api/auth/github/callback', async (req, res) => {
             body: JSON.stringify({
                 client_id: GITHUB_CLIENT_ID,
                 client_secret: GITHUB_CLIENT_SECRET,
-                code: code
+                code: code,
+                redirect_uri: redirectUri
             })
         });
         const tokenData = await tokenRes.json();
@@ -268,7 +288,8 @@ app.get('/api/auth/github/callback', async (req, res) => {
         const userRes = await fetch('https://api.github.com/user', {
             headers: { 
                 Authorization: `Bearer ${tokenData.access_token}`,
-                Accept: 'application/json'
+                Accept: 'application/json',
+                'User-Agent': 'HireMe-ai OAuth'
             }
         });
         const userData = await userRes.json();
@@ -277,7 +298,8 @@ app.get('/api/auth/github/callback', async (req, res) => {
         const emailRes = await fetch('https://api.github.com/user/emails', {
             headers: { 
                 Authorization: `Bearer ${tokenData.access_token}`,
-                Accept: 'application/json'
+                Accept: 'application/json',
+                'User-Agent': 'HireMe-ai OAuth'
             }
         });
         const emailData = await emailRes.json();

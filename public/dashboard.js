@@ -3,9 +3,11 @@ const urlParams = new URLSearchParams(window.location.search);
 const urlToken = urlParams.get('token');
 const urlUser = urlParams.get('user');
 
-if (urlToken && urlUser) {
+if (urlToken) {
     localStorage.setItem('hm_token', urlToken);
-    localStorage.setItem('hm_user', urlUser);
+    if (urlUser) {
+        localStorage.setItem('hm_user', urlUser);
+    }
     // Remove query params from URL without reloading
     window.history.replaceState({}, document.title, window.location.pathname);
 }
@@ -444,9 +446,7 @@ async function submitCheckout() {
     }, 1500);
 }
 
-// Hook initSettings when settings tool is clicked
-const originalSelectTool = selectTool;
-window.selectTool = function(tool) {
-    originalSelectTool(tool);
-    if(tool === 'settings') initSettings();
-};
+// Hook settings panel open without relying on a global selectTool function
+document.querySelectorAll('.nav-item[data-tool="settings"]').forEach((btn) => {
+    btn.addEventListener('click', initSettings);
+});

@@ -99,7 +99,14 @@
     </div>
 
     <script>
-        if (localStorage.getItem('hm_token')) window.location.href = 'dashboard.html';
+        const qs = new URLSearchParams(window.location.search);
+        const oauthError = qs.get('error');
+        if (oauthError) {
+            localStorage.removeItem('hm_token');
+            localStorage.removeItem('hm_user');
+        } else if (localStorage.getItem('hm_token')) {
+            window.location.href = 'dashboard.html';
+        }
 
         const cv = document.getElementById('authCanvas');
         const ct = cv.getContext('2d');
@@ -123,6 +130,12 @@
             requestAnimationFrame(animCv);
         }
         animCv();
+
+        if (oauthError) {
+            const errBox = document.getElementById('error-box');
+            errBox.textContent = decodeURIComponent(oauthError);
+            errBox.classList.remove('hidden');
+        }
 
         document.getElementById('registerForm').addEventListener('submit', async (e) => {
             e.preventDefault();
